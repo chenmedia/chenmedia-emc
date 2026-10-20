@@ -1,48 +1,7 @@
 import { CalendarDays, Download, Info, MapPin, Plus, Search, UserPlus, Users, WandSparkles, X } from "lucide-react";
-import program from "../src/data/program.json";
 import FrameOpsBootstrap from "./frameops-bootstrap";
 import AuthControl from "@/components/auth-control";
-
-const stages = ["Alle", "Glasshallen", "Praktisk Proptech", "Energy First Real Estate", "Future of Work & Life", "Behind The Build", "The Deal Room", "Founders' Lounge", "The Board Room", "Side Events", "All stages", "Scene ikke oppgitt"];
-
-const stageColors: Record<string, string> = {
-  Glasshallen: "#37c9d4", "Praktisk Proptech": "#a9cc5d", "Energy First Real Estate": "#e8a342",
-  "Future of Work & Life": "#7fa992", "Behind The Build": "#8c7898", "The Deal Room": "#c96e55",
-  "Founders' Lounge": "#c7aa69", "The Board Room": "#0d7774", "Side Events": "#78a934",
-  "All stages": "#657173", "Scene ikke oppgitt": "#899496",
-};
-
-const partnerSessions: Record<string, string[]> = {
-  "proptech-for-breakfast-1": ["Proptech Norway"], "summit-afterwork-at-vicini": ["Proptech Norway"],
-  "real-estate-innovation-project-of-the-year-part-i": ["Construction City"],
-  "dont-just-host-it-build-it": ["Siemens", "Noova Energy Systems"], "roundtable-spir-group": ["Spir"],
-  "fra-etterslep-til-innsikt": ["Spir"], "if-forsikring-roundtable": ["IF"],
-  "resilience-is-maintained-or-lost": ["IF", "OBOS"], "built-for-the-bad-days": ["IF"],
-};
-
-const mainPartnersFor = (session: (typeof program)[number]) => {
-  const partners = [...(partnerSessions[session.id] ?? [])];
-  if (session.stage === "Future of Work & Life") partners.push("OBOS");
-  if (session.stage === "Praktisk Proptech") partners.push("Noova Energy Systems");
-  return [...new Set(partners)];
-};
-
-const customerPriorities: Record<string, string> = {
-  "registration-and-breakfast-mingle-2": "Når det passer", "proptech-for-breakfast-1": "Når det passer",
-  "gehl-and-the-human-data-layer": "Mellom 10:45 og 10:55", "the-urban-operating-system-ai-data-and-the-new-chinese-city": "Når det passer",
-  "digital-sovereignty-lessons-from-the-battlefield-1": "Når det passer", "stop-asking-for-more-power": "11:15 og 11:30, eller 11:50",
-  "resilience-is-maintained-or-lost": "11:40 og 11:55", "kontoret-etter-ki": "Ca. 12:00",
-  "your-ai-strategy-is-already-obsolete": "Når det passer", "follow-the-green-umbrella-norsk": "Når det passer",
-  "redi-before-ai-fix-the-basics": "Ca. 12:45", "dont-just-host-it-build-it": "12:10 og 12:33",
-  "real-estate-innovation-project-of-the-year-part-i": "Når det passer", "lunch-mingle-3": "Når det passer",
-  "built-for-the-bad-days": "Mellom 14:45 og 14:50", "bolig-norges-helsesjekk": "Ca. 14:30",
-  "ett-år-120-millioner": "Når det passer", "fra-etterslep-til-innsikt": "Ca. 15:15",
-  "where-is-the-second-mover": "15:30 og 16:00", "reality-check": "Mellom 15:45 og 15:55",
-  "summit-afterwork-at-vicini": "Litt i begynnelsen",
-};
-
-const plannerProgram = program.map((session) => ({ ...session, mainPartners: mainPartnersFor(session), customerPriority: customerPriorities[session.id] ?? "" }));
-const stageCounts = Object.fromEntries(stages.map((stage) => [stage, stage === "Alle" ? program.length : program.filter((item) => item.stage === stage).length]));
+import { customerPriorities, mainPartnersFor, plannerProgram, program, stageColors, stageCounts, stages } from "@/lib/planner-program";
 
 export default function Home() {
   return <>
@@ -53,7 +12,7 @@ export default function Home() {
     </header>
 
     <main className="app-shell">
-      <section className="page-heading" aria-labelledby="page-title"><div><p className="eyebrow">MISSION CONTROL · OSLO PROPTECH SUMMIT</p><h1 id="page-title">Kontroll på hvert øyeblikk.</h1><p className="lede">Operativ bemanningsplan for fototeamet under Oslo Proptech Summit 2026. Delte besøkende har kun visning; eieren kan redigere den synkroniserte planen.</p></div><div className="page-heading__actions"><a href="#photographer-overview" className="ui-button ui-button--secondary"><Users size={16} aria-hidden="true" /> Fotografoversikt</a><button id="export-master-pdf" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Master-PDF</button><button id="export-button" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Eksporter CSV</button><button className="ui-button ui-button--primary" type="button" data-ui-dialog-trigger="photographer-dialog"><UserPlus size={16} aria-hidden="true" /> Legg til fotograf</button></div></section>
+      <section className="page-heading" aria-labelledby="page-title"><div><p className="eyebrow">MISSION CONTROL · OSLO PROPTECH SUMMIT</p><h1 id="page-title">Kontroll på hvert øyeblikk.</h1><p className="lede">Operativ bemanningsplan for fototeamet under Oslo Proptech Summit 2026. Delte besøkende har kun visning; eieren kan redigere den synkroniserte planen.</p></div><div className="page-heading__actions"><a href="/photographers" className="ui-button ui-button--secondary"><Users size={16} aria-hidden="true" /> Fotografplaner</a><button id="export-master-pdf" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Master-PDF</button><button id="export-button" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Eksporter CSV</button><button className="ui-button ui-button--primary" type="button" data-ui-dialog-trigger="photographer-dialog"><UserPlus size={16} aria-hidden="true" /> Legg til fotograf</button></div></section>
 
       <section className="metric-strip" aria-label="Statusoversikt">
         <div className="metric metric--primary"><span className="metric__label">Dekning</span><strong id="coverage-percent">0%</strong><span id="coverage-caption">0 av {program.length} aktiviteter</span></div>
@@ -93,26 +52,6 @@ export default function Home() {
         </section>
       </div>
 
-      <section className="photographer-overview" id="photographer-overview" aria-labelledby="photographer-overview-title">
-        <div className="photographer-overview__heading">
-          <div>
-            <p className="panel-kicker">KJØREPLANER</p>
-            <h2 id="photographer-overview-title">Fotografoversikt</h2>
-            <p>Samme operative informasjon som i PDF-ene, samlet i visuelle dagslinjer.</p>
-          </div>
-          <div className="photographer-overview__legend" aria-label="Forklaring">
-            <span><i className="partner-dot" /> Main Partner</span>
-            <span><i className="priority-dot" /> Kundeprioritet</span>
-            <span><i className="status-dot status-dot--conflict" /> Konflikt</span>
-          </div>
-        </div>
-        <div id="photographer-overview-list" className="photographer-overview__list" />
-        <div id="photographer-overview-empty" className="photographer-overview__empty">
-          <Users size={28} aria-hidden="true" />
-          <strong>Ingen fotografer i planen ennå</strong>
-          <span>Legg til fotografer for å se individuelle tidslinjer og kjøreplaner.</span>
-        </div>
-      </section>
     </main>
 
     <dialog id="photographer-dialog" className="photographer-dialog"><div className="dialog-heading"><div><p className="panel-kicker">NY RESSURS</p><h2>Legg til fotograf</h2></div><button className="ui-icon-button" type="button" data-ui-dialog-close aria-label="Lukk"><X size={19} aria-hidden="true" /></button></div><form id="photographer-form" className="photographer-form"><div className="form-field form-field--wide"><label htmlFor="photographer-name">Navn</label><input id="photographer-name" name="name" required placeholder="Fullt navn" autoComplete="name" /></div><div className="form-field"><label htmlFor="photographer-phone">Mobil</label><input id="photographer-phone" name="phone" type="tel" placeholder="+47 …" autoComplete="tel" /></div><div className="form-field"><label htmlFor="photographer-role">Rolle</label><select id="photographer-role" name="role"><option value="Scene">Scene</option><option value="Hovedfoto">Hovedfoto</option><option value="Sosiale medier">Sosiale medier</option><option value="Backstage">Backstage</option><option value="Video">Video</option></select></div><div className="form-field"><label htmlFor="photographer-from">Tilgjengelig fra</label><input id="photographer-from" name="from" type="time" defaultValue="08:00" required /></div><div className="form-field"><label htmlFor="photographer-to">Tilgjengelig til</label><input id="photographer-to" name="to" type="time" defaultValue="18:00" required /></div><div className="form-field form-field--color"><label htmlFor="photographer-color">Fargekode</label><input id="photographer-color" name="color" type="color" defaultValue="#37c9d4" /></div><div className="dialog-actions"><button className="ui-button ui-button--ghost" type="button" data-ui-dialog-close>Avbryt</button><button className="ui-button ui-button--primary" type="submit">Legg til i teamet</button></div></form></dialog>
