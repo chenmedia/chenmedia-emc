@@ -19,7 +19,7 @@
   --ui-radius-card: 10px;
   --ui-radius-control: 7px;
   color-scheme: light;
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Avenir Next", Avenir, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -208,7 +208,6 @@ a:focus-visible {
   align-items: center;
   min-height: 78px;
   border: 1px solid hsl(var(--line));
-  border-left: 4px solid var(--stage-color);
   border-radius: 8px;
   background: hsl(var(--surface));
   overflow: hidden;
@@ -216,7 +215,7 @@ a:focus-visible {
 .session-row[hidden] { display: none; }
 .session-row.is-conflict { border-color: hsl(var(--danger)); }
 .session-row.is-main-partner { box-shadow: inset 0 0 0 1px rgba(174, 126, 26, .3); }
-.session-row.is-customer-priority::after { position: absolute; inset: 0 0 0 auto; width: 4px; background: #a83bd2; content: ''; }
+.session-row.is-customer-priority { border-color: rgba(168, 59, 210, .42); }
 .session-row.is-covered .assignment-control { background: hsl(var(--success) / .06); }
 .session-row.is-conflict .assignment-control { background: hsl(var(--danger) / .07); }
 .session-time { align-self: stretch; display: grid; align-content: center; gap: 2px; padding: 12px; border-right: 1px solid hsl(var(--line)); background: hsl(var(--surface-muted)); }
@@ -254,10 +253,11 @@ a:focus-visible {
 .filter-empty strong { color: hsl(var(--ink)); }
 
 .team-list { display: grid; gap: 8px; margin-top: 14px; }
-.team-card { display: grid; gap: 9px; padding: 12px; border: 1px solid hsl(var(--line)); border-left: 4px solid var(--person-color); border-radius: 8px; background: hsl(var(--surface)); }
+.team-card { display: grid; gap: 9px; padding: 12px; border: 1px solid hsl(var(--line)); border-radius: 8px; background: hsl(var(--surface)); }
 .team-card__head { justify-content: space-between; gap: 8px; }
 .team-card__identity { min-width: 0; }
-.team-card__identity strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.team-card__identity strong { display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.team-card__identity strong::before { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--person-color); content: ''; }
 .team-card__identity span { color: hsl(var(--ink-muted)); font-size: 10px; }
 .team-card__actions { display: flex; align-items: center; gap: 7px; }
 .team-card__pdf { min-height: 27px; padding: 0 9px; border: 1px solid hsl(var(--brand) / .24); border-radius: 6px; background: hsl(var(--brand-soft)); color: hsl(var(--brand-solid)); cursor: pointer; font-size: 10px; font-weight: 800; white-space: nowrap; }
@@ -283,10 +283,10 @@ a:focus-visible {
 .photographer-overview__empty:not([hidden]) { display: grid; }
 .photographer-overview__empty strong { color: hsl(var(--ink)); font-size: 14px; }
 
-.photographer-overview-card { overflow: hidden; border: 1px solid hsl(var(--line)); border-top: 5px solid var(--person-color); border-radius: 12px; background: hsl(var(--surface)); box-shadow: 0 10px 32px hsl(var(--ink) / .045); }
+.photographer-overview-card { overflow: hidden; border: 1px solid hsl(var(--line)); border-radius: 12px; background: hsl(var(--surface)); box-shadow: 0 10px 32px hsl(var(--ink) / .045); }
 .photographer-overview-card__header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border-bottom: 1px solid hsl(var(--line)); }
 .photographer-overview-card__identity { display: flex; align-items: center; min-width: 0; gap: 12px; }
-.photographer-overview-card__avatar { display: grid; flex: 0 0 42px; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--person-color) 18%, white); color: hsl(var(--brand-solid)); font-size: 12px; font-weight: 900; letter-spacing: .04em; }
+.photographer-overview-card__avatar { display: grid; flex: 0 0 42px; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--person-color) 18%, white); color: hsl(var(--brand-solid)); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--person-color) 45%, white); font-size: 12px; font-weight: 900; letter-spacing: .04em; }
 .photographer-overview-card__identity h3 { margin: 0 0 3px; font-size: 18px; letter-spacing: -.02em; }
 .photographer-overview-card__identity p { margin: 0; color: hsl(var(--ink-muted)); font-size: 11px; }
 .photographer-overview-card__stats { display: grid; grid-template-columns: 1.35fr repeat(5, 1fr); border-bottom: 1px solid hsl(var(--line)); background: hsl(var(--surface-muted) / .58); }
@@ -315,9 +315,8 @@ a:focus-visible {
 .photographer-agenda { display: grid; margin: 0; padding: 0; list-style: none; }
 .photographer-agenda__item { position: relative; display: grid; grid-template-columns: 84px minmax(0, 1fr); border-bottom: 1px solid hsl(var(--line)); }
 .photographer-agenda__item:last-child { border-bottom: 0; }
-.photographer-agenda__item::before { position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--stage-color); content: ''; }
 .photographer-agenda__item.is-conflict { background: hsl(var(--danger) / .045); }
-.photographer-agenda__time { display: grid; align-content: center; gap: 2px; min-height: 76px; padding: 14px 14px 14px 20px; border-right: 1px solid hsl(var(--line)); background: hsl(var(--surface-muted) / .45); }
+.photographer-agenda__time { display: grid; align-content: center; gap: 2px; min-height: 76px; padding: 14px 14px 14px 18px; border-right: 1px solid hsl(var(--line)); background: hsl(var(--surface-muted) / .45); }
 .photographer-agenda__time strong { font-size: 15px; }
 .photographer-agenda__time span { color: hsl(var(--ink-muted)); font-size: 10px; }
 .photographer-agenda__copy { display: grid; align-content: center; min-width: 0; gap: 6px; padding: 13px 18px; }

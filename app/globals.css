@@ -87,8 +87,8 @@ input,
 .toast { padding: 13px 15px; border: 1px solid hsl(var(--line)); border-radius: 9px; background: hsl(var(--surface)); box-shadow: 0 15px 35px hsl(var(--ink) / .13); }
 .toast strong { display: block; margin-bottom: 2px; font-size: 12px; }
 .toast span { color: hsl(var(--ink-soft)); font-size: 11px; line-height: 1.4; }
-.toast--success { border-left: 4px solid hsl(var(--success)); }
-.toast--destructive { border-left: 4px solid hsl(var(--danger)); }
+.toast--success { border-color: hsl(var(--success) / .4); background: hsl(var(--success) / .06); }
+.toast--destructive { border-color: hsl(var(--danger) / .4); background: hsl(var(--danger) / .06); }
 
 @keyframes pulse { 50% { opacity: .35; transform: scale(.82); } }
 
