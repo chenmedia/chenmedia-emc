@@ -47,6 +47,7 @@ let activeCoverage = savedFilters.activeCoverage
 let activeProgramType = savedFilters.activeProgramType
 let activePhotographer = savedFilters.activePhotographer
 let searchTerm = savedFilters.searchTerm
+let overviewPhotographerId = ''
 const pendingTiming = new Map<string, CaptureTiming>()
 let lastRemoteUpdatedAt = ''
 let lastRemoteRevision = 0
@@ -370,7 +371,26 @@ function renderPhotographerOverview() {
   const hourTicks = Array.from({ length: 11 }, (_, index) => timelineStart + index * 60)
 
   empty.hidden = state.photographers.length > 0
-  container.innerHTML = state.photographers.map((person) => {
+  if (!state.photographers.length) {
+    overviewPhotographerId = ''
+    container.innerHTML = ''
+    return
+  }
+
+  if (!state.photographers.some((person) => person.id === overviewPhotographerId)) {
+    overviewPhotographerId = state.photographers[0].id
+  }
+
+  const photographerTabs = state.photographers.map((person) => {
+    const assignmentCount = Object.values(state.assignments).filter((assignment) => assignment?.photographerId === person.id).length
+    const selected = person.id === overviewPhotographerId
+    return `<button class="photographer-switcher__tab${selected ? ' is-active' : ''}" type="button" role="tab" aria-selected="${selected}" aria-controls="photographer-plan-panel" tabindex="${selected ? '0' : '-1'}" data-overview-person="${escapeHtml(person.id)}" style="--person-color:${escapeHtml(person.color)}">
+      <span class="photographer-switcher__avatar">${escapeHtml(initials(person.name))}</span>
+      <span class="photographer-switcher__copy"><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.role)} · ${assignmentCount} oppdrag</small></span>
+    </button>`
+  }).join('')
+
+  const person = state.photographers.find((candidate) => candidate.id === overviewPhotographerId)!
     const assigned = program.flatMap((session) => {
       const assignment = state.assignments[session.id]
       return assignment?.photographerId === person.id
@@ -411,7 +431,7 @@ function renderPhotographerOverview() {
       </li>`
     }).join('')
 
-    return `<article class="photographer-overview-card" style="--person-color:${escapeHtml(person.color)}">
+    const photographerPlan = `<article id="photographer-plan-panel" class="photographer-overview-card" role="tabpanel" aria-label="Kjøreplan for ${escapeHtml(person.name)}" style="--person-color:${escapeHtml(person.color)}">
       <header class="photographer-overview-card__header">
         <div class="photographer-overview-card__identity">
           <span class="photographer-overview-card__avatar">${escapeHtml(initials(person.name))}</span>
@@ -437,7 +457,15 @@ function renderPhotographerOverview() {
       </div>
       <ol class="photographer-agenda">${agenda}</ol>` : '<div class="photographer-overview-card__no-assignments"><strong>Ingen oppdrag tildelt</strong><span>Oppdrag dukker opp her så snart fotografen blir valgt i programmet.</span></div>'}
     </article>`
-  }).join('')
+
+  container.innerHTML = `<div class="photographer-switcher" role="tablist" aria-label="Velg fotograf">${photographerTabs}</div>${photographerPlan}`
+
+  container.querySelectorAll<HTMLButtonElement>('[data-overview-person]').forEach((button) => {
+    button.addEventListener('click', () => {
+      overviewPhotographerId = button.dataset.overviewPerson || overviewPhotographerId
+      renderPhotographerOverview()
+    })
+  })
 
   container.querySelectorAll<HTMLButtonElement>('[data-overview-export-person]').forEach((button) => {
     button.addEventListener('click', () => { void exportPhotographerPdf(button.dataset.overviewExportPerson || '') })
