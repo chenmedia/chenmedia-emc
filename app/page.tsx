@@ -1,9 +1,11 @@
-import { CalendarDays, Download, Info, MapPin, Plus, Search, UserPlus, Users, WandSparkles, X } from "lucide-react";
+import { CalendarDays, Download, History, Info, MapPin, Plus, Search, UserPlus, Users, WandSparkles, X } from "lucide-react";
 import FrameOpsBootstrap from "./frameops-bootstrap";
 import AuthControl from "@/components/auth-control";
 import { customerPriorities, mainPartnersFor, plannerProgram, program, stageColors, stageCounts, stages } from "@/lib/planner-program";
+import { isEditor } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const canEdit = await isEditor();
   return <>
     <a className="skip-link" href="#schedule">Gå til bemanningsplan</a>
     <header className="topbar">
@@ -12,7 +14,7 @@ export default function Home() {
     </header>
 
     <main className="app-shell">
-      <section className="page-heading" aria-labelledby="page-title"><div><p className="eyebrow">MISSION CONTROL · OSLO PROPTECH SUMMIT</p><h1 id="page-title">Kontroll på hvert øyeblikk.</h1><p className="lede">Operativ bemanningsplan for fototeamet under Oslo Proptech Summit 2026. Delte besøkende har kun visning; eieren kan redigere den synkroniserte planen.</p></div><div className="page-heading__actions"><a href="/photographers" className="ui-button ui-button--secondary"><Users size={16} aria-hidden="true" /> Fotografplaner</a><button id="export-master-pdf" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Master-PDF</button><button id="export-button" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Eksporter CSV</button><button className="ui-button ui-button--primary" type="button" data-ui-dialog-trigger="photographer-dialog"><UserPlus size={16} aria-hidden="true" /> Legg til fotograf</button></div></section>
+      <section className="page-heading" aria-labelledby="page-title"><div><p className="eyebrow">MISSION CONTROL · OSLO PROPTECH SUMMIT</p><h1 id="page-title">Kontroll på hvert øyeblikk.</h1><p className="lede">Operativ bemanningsplan for fototeamet under Oslo Proptech Summit 2026. Delte besøkende har kun visning; eieren kan redigere den synkroniserte planen.</p></div><div className="page-heading__actions"><a href="/photographers" className="ui-button ui-button--secondary"><Users size={16} aria-hidden="true" /> Fotografplaner</a>{canEdit && <a href="/history" className="ui-button ui-button--outline"><History size={16} aria-hidden="true" /> Endringshistorikk</a>}<button id="export-master-pdf" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Master-PDF</button><button id="export-button" className="ui-button ui-button--outline" type="button"><Download size={16} aria-hidden="true" /> Eksporter CSV</button><button className="ui-button ui-button--primary" type="button" data-ui-dialog-trigger="photographer-dialog"><UserPlus size={16} aria-hidden="true" /> Legg til fotograf</button></div></section>
 
       <section className="metric-strip" aria-label="Statusoversikt">
         <div className="metric metric--primary"><span className="metric__label">Dekning</span><strong id="coverage-percent">0%</strong><span id="coverage-caption">0 av {program.length} aktiviteter</span></div>
