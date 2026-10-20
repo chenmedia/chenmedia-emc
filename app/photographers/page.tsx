@@ -5,6 +5,8 @@ import { isEditor } from "@/lib/auth";
 import { plannerProgram } from "@/lib/planner-program";
 import FrameOpsBootstrap from "../frameops-bootstrap";
 
+export const dynamic = "force-dynamic";
+
 export default async function PhotographerPlansPage() {
   const canEdit = await isEditor();
   return <>

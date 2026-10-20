@@ -7,7 +7,7 @@ kundeprioritetsfiltre, teamregister, tildelinger ved start/slutt/hele
 programposten, konfliktvarsling, autofordeling og PDF-/CSV-eksport.
 
 Applikasjonen er klargjort for Next.js på Vercel med Neon Postgres og
-passordbeskyttet redaktørtilgang. Se [VERCEL_NEON.md](./VERCEL_NEON.md).
+Google-basert redaktørtilgang med Neon Auth. Se [VERCEL_NEON.md](./VERCEL_NEON.md).
 
 Fotografer og tildelinger lagres i en sentral Neon-database. Nettleserens
 lokale lagring brukes bare som cache.

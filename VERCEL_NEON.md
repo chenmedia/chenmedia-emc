@@ -2,8 +2,7 @@
 
 Prosjektet er en vanlig Next.js-app. Vercel bygger den fra GitHub, mens den
 delte planen lagres i Neon. Offentlige besøkende kan lese planen uten
-telefonnumre; redaktøren logger inn med et passord som lagres sikkert som en
-HttpOnly-signert sesjon.
+telefonnumre; redaktøren logger inn med en godkjent Google-konto via Neon Auth.
 
 ## 1. Koble GitHub til Vercel
 
@@ -19,13 +18,18 @@ Vercel skal oppdage Next.js automatisk. Build-kommandoen er pnpm build.
 Neon-integrasjonen i Vercel skal ha opprettet DATABASE_URL for Production,
 Preview og Development. Ikke legg databasepassord i Git.
 
-## 3. Legg til redaktørhemmeligheter
+## 3. Konfigurer Neon Auth og redaktører
 
 Opprett disse krypterte Environment Variables i Vercel:
 
-- EMC_EDITOR_PASSWORD: et langt, unikt passord du bruker på /auth/sign-in.
-- EMC_SESSION_SECRET: minst 32 tilfeldige tegn, kun brukt til å signere
-  innloggingssesjonen.
+- NEON_AUTH_BASE_URL: Auth URL-en for produksjonsbranchen i Neon.
+- NEON_AUTH_COOKIE_SECRET: minst 32 tilfeldige tegn, kun brukt til å signere
+  innloggingssesjonen i Next.js.
+- EMC_EDITOR_EMAILS: kommaseparert liste over Google-adresser som kan redigere.
+
+Legg produksjonsdomenet til som trusted domain under Neon → Settings → Better
+Auth. Google kan testes med Neons delte utviklingsnøkler; bruk egne Google OAuth
+credentials når innloggingen skal ha egen EMC-branding i produksjon.
 
 ## 4. Overfør eksisterende data
 

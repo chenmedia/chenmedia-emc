@@ -148,6 +148,38 @@ input,
 .auth-form { display: grid; gap: 10px; margin: 24px 0 18px; }
 .auth-form label { color: hsl(var(--ink-soft)); font-size: 12px; font-weight: 750; }
 .auth-message { padding: 11px 12px; border-radius: 8px; background: hsl(var(--brand-soft)); color: hsl(var(--brand-solid)) !important; }
+.auth-message--error { background: hsl(var(--danger) / .08); color: hsl(var(--danger)) !important; }
+
+.google-sign-in {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid hsl(var(--line));
+  border-radius: var(--ui-radius-control);
+  background: hsl(var(--surface));
+  color: hsl(var(--ink));
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.google-sign-in::after { content: ""; }
+.google-sign-in:hover { border-color: hsl(var(--brand) / .35); background: hsl(var(--surface-muted)); }
+.google-sign-in:disabled { cursor: wait; opacity: .65; }
+.google-sign-in__mark { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid hsl(var(--line)); border-radius: 50%; color: #4285f4; font-size: 15px; font-weight: 850; }
+
+.auth-identity { display: grid; gap: 5px; margin: 22px 0 18px; padding: 15px; border: 1px solid hsl(var(--line)); border-radius: 9px; background: hsl(var(--surface-muted)); }
+.auth-identity strong { font-size: 13px; }
+.auth-identity > span { color: hsl(var(--ink-soft)); font-size: 11px; }
+.auth-identity p { margin: 8px 0 10px; color: hsl(var(--ink-soft)); font-size: 12px; line-height: 1.5; }
+.auth-identity form { justify-self: start; }
+
+.auth-control { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.auth-control > span { display: grid; min-width: 0; color: hsl(var(--ink-soft)); font-size: 11px; line-height: 1.15; }
+.auth-control > span small { color: hsl(var(--ink-muted)); font-size: 8px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 
 @media (max-width: 820px) {
   .sync-badge { display: inline-flex; }

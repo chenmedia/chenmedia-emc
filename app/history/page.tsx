@@ -5,6 +5,8 @@ import AuthControl from "@/components/auth-control";
 import { isEditor } from "@/lib/auth";
 import HistoryPanel from "./history-panel";
 
+export const dynamic = "force-dynamic";
+
 export default async function HistoryPage() {
   if (!(await isEditor())) redirect("/auth/sign-in");
 

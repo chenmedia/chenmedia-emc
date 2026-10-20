@@ -1,4 +1,4 @@
-import { isEditor } from "@/lib/auth";
+import { editorLabel, getEditor } from "@/lib/auth";
 import { getDatabase } from "@/lib/neon";
 import { ensureHistorySchema, EVENT_KEY, recordHistoryVersion, type StoredPlannerState } from "@/lib/planner-history";
 
@@ -19,14 +19,15 @@ function json(data: unknown, status = 200) {
 }
 
 export async function GET() {
-  if (!(await isEditor())) return json({ error: "Du må være logget inn som redaktør." }, 401);
+  const editor = await getEditor();
+  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
 
   try {
     const sql = getDatabase();
     await ensureHistorySchema(sql);
-    const [current] = await sql`SELECT state, revision FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: StoredPlannerState; revision: number }>;
+    const [current] = await sql`SELECT state, revision, updated_by FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: StoredPlannerState; revision: number; updated_by: string }>;
     if (current) {
-      await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Startpunkt da endringshistorikken ble aktivert."]);
+      await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Startpunkt da endringshistorikken ble aktivert."], current.updated_by || editorLabel(editor));
     }
     const rows = await sql`
       SELECT revision, action, changes, changed_at, changed_by,
@@ -54,7 +55,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await isEditor())) return json({ error: "Du må være logget inn som redaktør." }, 401);
+  const editor = await getEditor();
+  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
+  const changedBy = editorLabel(editor);
 
   let revision = 0;
   try {
@@ -78,18 +81,18 @@ export async function POST(request: Request) {
     ` as Array<{ state: StoredPlannerState; revision: number }>;
     if (!current) return json({ error: "Fant ikke den aktive planen." }, 404);
 
-    await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Sikkerhetskopi før gjenoppretting."]);
+    await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Sikkerhetskopi før gjenoppretting."], changedBy);
     const serialized = JSON.stringify(snapshot.state);
     const [restored] = await sql`
       UPDATE event_states
       SET state = ${serialized}::jsonb,
           revision = revision + 1,
           updated_at = NOW(),
-          updated_by = 'editor'
+          updated_by = ${changedBy}
       WHERE event_key = ${EVENT_KEY}
       RETURNING revision, updated_at
     ` as Array<{ revision: number; updated_at: string }>;
-    await recordHistoryVersion(sql, snapshot.state, restored.revision, "restore", [`Gjenopprettet planen fra revisjon ${revision}.`]);
+    await recordHistoryVersion(sql, snapshot.state, restored.revision, "restore", [`Gjenopprettet planen fra revisjon ${revision}.`], changedBy);
 
     return json({ ok: true, revision: restored.revision, updatedAt: restored.updated_at, restoredFrom: revision });
   } catch (error) {

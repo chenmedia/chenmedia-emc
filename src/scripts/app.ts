@@ -531,7 +531,7 @@ function renderPhotographerFilter() {
 function applyAccessMode() {
   document.querySelectorAll<HTMLButtonElement>('#auto-assign, #clear-assignments, [data-ui-dialog-trigger], [data-remove-person]').forEach((control) => {
     control.disabled = !canEdit
-    control.title = canEdit ? '' : 'Logg inn som eier for å redigere planen'
+    control.title = canEdit ? '' : 'Logg inn som redaktør for å redigere planen'
   })
   document.querySelectorAll('[data-assignment-select], [data-timing-select]').forEach((control) => {
     const select = control as unknown as HTMLSelectElement

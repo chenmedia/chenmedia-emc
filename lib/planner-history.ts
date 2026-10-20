@@ -95,13 +95,14 @@ export async function recordHistoryVersion(
   revision: number,
   action: "save" | "restore" | "baseline",
   changes: string[],
+  changedBy: string,
 ) {
   await ensureHistorySchema(sql);
   const serializedState = JSON.stringify(state);
   const serializedChanges = JSON.stringify(changes);
   await sql`
     INSERT INTO event_state_history (event_key, revision, state, action, changes, changed_at, changed_by)
-    VALUES (${EVENT_KEY}, ${revision}, ${serializedState}::jsonb, ${action}, ${serializedChanges}::jsonb, NOW(), 'editor')
+    VALUES (${EVENT_KEY}, ${revision}, ${serializedState}::jsonb, ${action}, ${serializedChanges}::jsonb, NOW(), ${changedBy})
     ON CONFLICT (event_key, revision) DO NOTHING
   `;
 }

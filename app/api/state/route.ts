@@ -1,4 +1,4 @@
-import { isEditor } from "@/lib/auth";
+import { editorLabel, getEditor, isEditor } from "@/lib/auth";
 import { getDatabase } from "@/lib/neon";
 import { describeStateChanges, ensureHistorySchema, EVENT_KEY, recordHistoryVersion } from "@/lib/planner-history";
 
@@ -94,7 +94,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await isEditor())) return json({ error: "Du må være logget inn som redaktør." }, 401);
+  const editor = await getEditor();
+  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
+  const changedBy = editorLabel(editor);
 
   let body: unknown;
   try {
@@ -109,14 +111,14 @@ export async function POST(request: Request) {
   try {
     const sql = getDatabase();
     await ensureHistorySchema(sql);
-    const [previous] = await sql`SELECT state, revision FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: PlannerState; revision: number }>;
+    const [previous] = await sql`SELECT state, revision, updated_by FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: PlannerState; revision: number; updated_by: string }>;
     if (previous) {
-      await recordHistoryVersion(sql, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringshistorikken ble aktivert."]);
+      await recordHistoryVersion(sql, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringshistorikken ble aktivert."], previous.updated_by || "Redaktør");
     }
     const serialized = JSON.stringify(state);
     const [saved] = await sql`
       INSERT INTO event_states (event_key, state, revision, updated_at, updated_by)
-      VALUES (${EVENT_KEY}, ${serialized}::jsonb, 1, NOW(), 'editor')
+      VALUES (${EVENT_KEY}, ${serialized}::jsonb, 1, NOW(), ${changedBy})
       ON CONFLICT (event_key) DO UPDATE SET
         state = EXCLUDED.state,
         revision = event_states.revision + 1,
@@ -125,7 +127,7 @@ export async function POST(request: Request) {
       RETURNING revision, updated_at
     ` as Array<{ revision: number; updated_at: string }>;
 
-    await recordHistoryVersion(sql, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state));
+    await recordHistoryVersion(sql, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state), changedBy);
 
     return json({ ok: true, revision: saved.revision, updatedAt: saved.updated_at });
   } catch (error) {
