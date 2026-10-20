@@ -90,6 +90,7 @@ a:focus-visible {
 }
 
 .topbar__brand { gap: 16px; }
+.topbar__brand-link { color: inherit; text-decoration: none; }
 .topbar__brand img { display: block; width: 108px; height: auto; }
 .brand-divider { width: 1px; height: 38px; background: hsl(var(--line)); }
 .topbar__brand > div:last-child { display: grid; gap: 2px; }
@@ -273,6 +274,10 @@ a:focus-visible {
 .team-tip p { margin: 0; font-size: 10px; line-height: 1.45; }
 
 .photographer-overview { margin-top: 48px; scroll-margin-top: 104px; }
+.photographer-overview--standalone { margin-top: 0; }
+.photographer-plans-page { width: min(1220px, 100%); }
+.photographer-plans-page__heading { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid hsl(var(--line)); }
+.photographer-plans-page .photographer-overview__legend { justify-content: flex-start; margin-bottom: 12px; }
 .photographer-overview__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid hsl(var(--line)); }
 .photographer-overview__heading h2 { margin: 4px 0 6px; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.035em; }
 .photographer-overview__heading p:last-child { max-width: 620px; margin: 0; color: hsl(var(--ink-soft)); font-size: 13px; }
