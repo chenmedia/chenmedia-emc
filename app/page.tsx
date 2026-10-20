@@ -92,6 +92,27 @@ export default function Home() {
           <div id="team-list" className="team-list" /><div id="team-empty" className="team-empty"><Users size={26} aria-hidden="true" /><strong>Teamet er tomt</strong><span>Legg inn fotografene før du fordeler programmet.</span></div><div className="team-tip"><Info size={16} aria-hidden="true" /><p>Velg 15 minutter ved start eller slutt, eller hele programposten. Autofordeling prioriterer korte vinduer.</p></div>
         </section>
       </div>
+
+      <section className="photographer-overview" id="photographer-overview" aria-labelledby="photographer-overview-title">
+        <div className="photographer-overview__heading">
+          <div>
+            <p className="panel-kicker">KJØREPLANER</p>
+            <h2 id="photographer-overview-title">Fotografoversikt</h2>
+            <p>Samme operative informasjon som i PDF-ene, samlet i visuelle dagslinjer.</p>
+          </div>
+          <div className="photographer-overview__legend" aria-label="Forklaring">
+            <span><i className="partner-dot" /> Main Partner</span>
+            <span><i className="priority-dot" /> Kundeprioritet</span>
+            <span><i className="status-dot status-dot--conflict" /> Konflikt</span>
+          </div>
+        </div>
+        <div id="photographer-overview-list" className="photographer-overview__list" />
+        <div id="photographer-overview-empty" className="photographer-overview__empty">
+          <Users size={28} aria-hidden="true" />
+          <strong>Ingen fotografer i planen ennå</strong>
+          <span>Legg til fotografer for å se individuelle tidslinjer og kjøreplaner.</span>
+        </div>
+      </section>
     </main>
 
     <dialog id="photographer-dialog" className="photographer-dialog"><div className="dialog-heading"><div><p className="panel-kicker">NY RESSURS</p><h2>Legg til fotograf</h2></div><button className="ui-icon-button" type="button" data-ui-dialog-close aria-label="Lukk"><X size={19} aria-hidden="true" /></button></div><form id="photographer-form" className="photographer-form"><div className="form-field form-field--wide"><label htmlFor="photographer-name">Navn</label><input id="photographer-name" name="name" required placeholder="Fullt navn" autoComplete="name" /></div><div className="form-field"><label htmlFor="photographer-phone">Mobil</label><input id="photographer-phone" name="phone" type="tel" placeholder="+47 …" autoComplete="tel" /></div><div className="form-field"><label htmlFor="photographer-role">Rolle</label><select id="photographer-role" name="role"><option value="Scene">Scene</option><option value="Hovedfoto">Hovedfoto</option><option value="Sosiale medier">Sosiale medier</option><option value="Backstage">Backstage</option><option value="Video">Video</option></select></div><div className="form-field"><label htmlFor="photographer-from">Tilgjengelig fra</label><input id="photographer-from" name="from" type="time" defaultValue="08:00" required /></div><div className="form-field"><label htmlFor="photographer-to">Tilgjengelig til</label><input id="photographer-to" name="to" type="time" defaultValue="18:00" required /></div><div className="form-field form-field--color"><label htmlFor="photographer-color">Fargekode</label><input id="photographer-color" name="color" type="color" defaultValue="#37c9d4" /></div><div className="dialog-actions"><button className="ui-button ui-button--ghost" type="button" data-ui-dialog-close>Avbryt</button><button className="ui-button ui-button--primary" type="submit">Legg til i teamet</button></div></form></dialog>

@@ -348,6 +348,7 @@ function toast(title: string, description: string, variant: 'default' | 'success
 
 function render() {
   renderTeam()
+  renderPhotographerOverview()
   renderPhotographerFilter()
   renderAssignmentOptions()
   renderStatuses()
@@ -355,6 +356,111 @@ function render() {
   syncFilterControls()
   applyFilters()
   applyAccessMode()
+}
+
+function renderPhotographerOverview() {
+  const container = document.querySelector<HTMLElement>('#photographer-overview-list')
+  const empty = document.querySelector<HTMLElement>('#photographer-overview-empty')
+  if (!container || !empty) return
+
+  const conflicts = conflictIds()
+  const timelineStart = 8 * 60
+  const timelineEnd = 18 * 60
+  const timelineDuration = timelineEnd - timelineStart
+  const hourTicks = Array.from({ length: 11 }, (_, index) => timelineStart + index * 60)
+
+  empty.hidden = state.photographers.length > 0
+  container.innerHTML = state.photographers.map((person) => {
+    const assigned = program.flatMap((session) => {
+      const assignment = state.assignments[session.id]
+      return assignment?.photographerId === person.id
+        ? [{ session, assignment, window: coverageWindow(session, assignment.timing) }]
+        : []
+    }).sort((a, b) => a.window.start - b.window.start)
+    const uniqueStages = new Set(assigned.map(({ session }) => session.stage)).size
+    const firstWindow = assigned.at(0)?.window
+    const lastWindow = assigned.at(-1)?.window
+    const conflictCount = assigned.filter(({ session }) => conflicts.has(session.id)).length
+
+    const timelineBlocks = assigned.map(({ session, assignment, window }, index) => {
+      const start = Math.max(timelineStart, window.start)
+      const end = Math.min(timelineEnd, window.end)
+      if (end <= start) return ''
+      const left = ((start - timelineStart) / timelineDuration) * 100
+      const width = Math.max(0.8, ((end - start) / timelineDuration) * 100)
+      const offset = index % 3
+      const label = `${formatTime(window.start)}–${formatTime(window.end)} · ${session.title} · ${session.stage}`
+      return `<span class="photographer-timeline__block${conflicts.has(session.id) ? ' is-conflict' : ''}" style="--block-left:${left.toFixed(3)}%;--block-width:${width.toFixed(3)}%;--block-color:${escapeHtml(stageColor(session.stage))};--block-row:${offset}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"><i>${escapeHtml(assignment.timing === 'start' ? 'S' : assignment.timing === 'end' ? 'L' : 'H')}</i></span>`
+    }).join('')
+
+    const agenda = assigned.map(({ session, assignment, window }) => {
+      const conflict = conflicts.has(session.id)
+      const timingLabel = assignment.timing === 'start' ? 'Start' : assignment.timing === 'end' ? 'Slutt' : 'Hele'
+      const markers = [
+        ...session.mainPartners.map((partner) => `<span class="overview-marker overview-marker--partner">Main Partner · ${escapeHtml(partner)}</span>`),
+        session.customerPriority ? `<span class="overview-marker overview-marker--priority">Kundeprioritet · ${escapeHtml(session.customerPriority)}</span>` : '',
+        conflict ? '<span class="overview-marker overview-marker--conflict">Konflikt</span>' : '',
+      ].filter(Boolean).join('')
+      return `<li class="photographer-agenda__item${conflict ? ' is-conflict' : ''}" style="--stage-color:${escapeHtml(stageColor(session.stage))}">
+        <div class="photographer-agenda__time"><strong>${formatTime(window.start)}</strong><span>${formatTime(window.end)}</span></div>
+        <div class="photographer-agenda__copy">
+          <div class="photographer-agenda__meta"><span class="photographer-agenda__stage"><i></i>${escapeHtml(session.stage)}</span><span>${timingLabel}</span><span>Program ${escapeHtml(session.start)}–${escapeHtml(session.end)}</span></div>
+          <strong>${escapeHtml(session.title)}</strong>
+          ${markers ? `<div class="photographer-agenda__markers">${markers}</div>` : ''}
+        </div>
+      </li>`
+    }).join('')
+
+    return `<article class="photographer-overview-card" style="--person-color:${escapeHtml(person.color)}">
+      <header class="photographer-overview-card__header">
+        <div class="photographer-overview-card__identity">
+          <span class="photographer-overview-card__avatar">${escapeHtml(initials(person.name))}</span>
+          <div><h3>${escapeHtml(person.name)}</h3><p>${escapeHtml(person.role)}${person.phone ? ` · ${escapeHtml(person.phone)}` : ''}</p></div>
+        </div>
+        <button class="ui-button ui-button--outline ui-button--small" type="button" data-overview-export-person="${escapeHtml(person.id)}">Eksporter PDF</button>
+      </header>
+      <div class="photographer-overview-card__stats">
+        <div><span>Tilgjengelig</span><strong>${escapeHtml(person.from)}–${escapeHtml(person.to)}</strong></div>
+        <div><span>Oppdrag</span><strong>${assigned.length}</strong></div>
+        <div><span>Scener</span><strong>${uniqueStages}</strong></div>
+        <div><span>Første foto</span><strong>${firstWindow ? formatTime(firstWindow.start) : '–'}</strong></div>
+        <div><span>Siste ferdig</span><strong>${lastWindow ? formatTime(lastWindow.end) : '–'}</strong></div>
+        <div class="${conflictCount ? 'has-conflict' : ''}"><span>Konflikter</span><strong>${conflictCount}</strong></div>
+      </div>
+      ${assigned.length ? `<div class="photographer-timeline" aria-label="Tidslinje for ${escapeHtml(person.name)} fra klokken 08 til 18">
+        <div class="photographer-timeline__label"><strong>Dagen din</strong><span>Fotovinduer · S = start, L = slutt, H = hele</span></div>
+        <div class="photographer-timeline__plot">
+          <div class="photographer-timeline__grid">${hourTicks.map((tick) => `<i style="--tick-left:${((tick - timelineStart) / timelineDuration) * 100}%"></i>`).join('')}</div>
+          <div class="photographer-timeline__blocks">${timelineBlocks}</div>
+          <div class="photographer-timeline__axis">${hourTicks.filter((_, index) => index % 2 === 0 || index === hourTicks.length - 1).map((tick) => `<span style="--tick-left:${((tick - timelineStart) / timelineDuration) * 100}%">${formatTime(tick)}</span>`).join('')}</div>
+        </div>
+      </div>
+      <ol class="photographer-agenda">${agenda}</ol>` : '<div class="photographer-overview-card__no-assignments"><strong>Ingen oppdrag tildelt</strong><span>Oppdrag dukker opp her så snart fotografen blir valgt i programmet.</span></div>'}
+    </article>`
+  }).join('')
+
+  container.querySelectorAll<HTMLButtonElement>('[data-overview-export-person]').forEach((button) => {
+    button.addEventListener('click', () => { void exportPhotographerPdf(button.dataset.overviewExportPerson || '') })
+  })
+}
+
+function stageColor(stage: string): string {
+  const colors: Record<string, string> = {
+    'Glasshallen': '#3abfcb',
+    'Praktisk Proptech': '#00716f',
+    'Energy First Real Estate': '#dea330',
+    'Future of Work & Life': '#6f9941',
+    'Behind The Build': '#70658f',
+    'The Deal Room': '#355d83',
+    "Founders' Lounge": '#c05341',
+    'The Board Room': '#2d7570',
+    'Side Events': '#78878c',
+  }
+  return colors[stage] || '#78878c'
+}
+
+function initials(name: string): string {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'F'
 }
 
 function renderPhotographerFilter() {
