@@ -57,10 +57,10 @@ let dirty = false
 let localRevision = 0
 let canEdit = false
 
-const teamList = document.querySelector<HTMLElement>('#team-list')!
-const teamEmpty = document.querySelector<HTMLElement>('#team-empty')!
-const form = document.querySelector<HTMLFormElement>('#photographer-form')!
-const photographerDialog = document.querySelector<HTMLDialogElement>('#photographer-dialog')!
+const teamList = document.querySelector<HTMLElement>('#team-list')
+const teamEmpty = document.querySelector<HTMLElement>('#team-empty')
+const form = document.querySelector<HTMLFormElement>('#photographer-form')
+const photographerDialog = document.querySelector<HTMLDialogElement>('#photographer-dialog')
 
 function loadFilterState() {
   try {
@@ -541,6 +541,7 @@ function applyAccessMode() {
 }
 
 function renderTeam() {
+  if (!teamList || !teamEmpty) return
   const conflicts = conflictIds()
   teamEmpty.hidden = state.photographers.length > 0
   teamList.innerHTML = state.photographers.map((person) => {
@@ -1280,7 +1281,7 @@ document.querySelector<HTMLInputElement>('#program-search')?.addEventListener('i
   applyFilters()
 })
 
-form.addEventListener('submit', (event) => {
+if (form && photographerDialog) form.addEventListener('submit', (event) => {
   event.preventDefault()
   if (!form.reportValidity()) return
   const data = new FormData(form)
@@ -1308,14 +1309,14 @@ form.addEventListener('submit', (event) => {
 })
 
 document.querySelectorAll<HTMLElement>('[data-ui-dialog-trigger]').forEach((button) => {
-  button.addEventListener('click', () => photographerDialog.showModal())
+  button.addEventListener('click', () => photographerDialog?.showModal())
 })
 
 document.querySelectorAll<HTMLElement>('[data-ui-dialog-close]').forEach((button) => {
-  button.addEventListener('click', () => photographerDialog.close())
+  button.addEventListener('click', () => photographerDialog?.close())
 })
 
-photographerDialog.addEventListener('click', (event) => {
+photographerDialog?.addEventListener('click', (event) => {
   if (event.target === photographerDialog) photographerDialog.close()
 })
 
