@@ -1,0 +1,582 @@
+[
+  {
+    "id": "registration-and-breakfast-mingle-2",
+    "title": "Registration and Breakfast Mingle",
+    "stage": "Glasshallen",
+    "start": "08:00",
+    "end": "08:45",
+    "language": "",
+    "type": "break",
+    "href": "https://proptechsummit.no/program/registration-and-breakfast-mingle-2"
+  },
+  {
+    "id": "proptech-for-breakfast-1",
+    "title": "Proptech for Breakfast",
+    "stage": "Glasshallen",
+    "start": "08:45",
+    "end": "10:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/proptech-for-breakfast-1"
+  },
+  {
+    "id": "skalering-til-europa-erfaringer-muligheter-og-veien-inn-i-nye-markeder",
+    "title": "Roundtable: Skalering til Europa",
+    "stage": "The Board Room",
+    "start": "10:00",
+    "end": "11:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/skalering-til-europa-erfaringer-muligheter-og-veien-inn-i-nye-markeder"
+  },
+  {
+    "id": "akt-i-fra-buzz-til-verdi-åtte-år-med-proptech-på-20-minutter",
+    "title": "Praktisk Proptech I: Fra buzz til verdi. Åtte år med PropTech på 20 minutter",
+    "stage": "Praktisk Proptech",
+    "start": "10:15",
+    "end": "10:35",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-i-fra-buzz-til-verdi-åtte-år-med-proptech-på-20-minutter"
+  },
+  {
+    "id": "slumbers-what-will-we-still-want-from-buildings",
+    "title": "Antony Slumbers: What Will We Still Want From Buildings?",
+    "stage": "Future of Work & Life",
+    "start": "10:15",
+    "end": "10:30",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/slumbers-what-will-we-still-want-from-buildings"
+  },
+  {
+    "id": "jll-how-physical-ai-will-walk-talk-and-run-the-building",
+    "title": "JLL: How Physical AI Will Walk, Talk and Operate The Building",
+    "stage": "Behind The Build",
+    "start": "10:15",
+    "end": "10:45",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/jll-how-physical-ai-will-walk-talk-and-run-the-building"
+  },
+  {
+    "id": "energy-first-part-i-the-new-map-of-power",
+    "title": "Energy First Part I: The New Map Of Power",
+    "stage": "Energy First Real Estate",
+    "start": "10:30",
+    "end": "11:15",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/energy-first-part-i-the-new-map-of-power"
+  },
+  {
+    "id": "gehl-and-the-human-data-layer",
+    "title": "The Human Data Layer",
+    "stage": "Future of Work & Life",
+    "start": "10:30",
+    "end": "11:10",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/gehl-and-the-human-data-layer"
+  },
+  {
+    "id": "the-urban-operating-system-ai-data-and-the-new-chinese-city",
+    "title": "Hongqi Guo: Where We're Going We Don't Need Roads",
+    "stage": "Glasshallen",
+    "start": "10:30",
+    "end": "11:00",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/the-urban-operating-system-ai-data-and-the-new-chinese-city"
+  },
+  {
+    "id": "akt-ii-det-ærlige-kapitlet",
+    "title": "Praktisk Proptech II: Det ærlige kapitlet",
+    "stage": "Praktisk Proptech",
+    "start": "10:35",
+    "end": "11:25",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-ii-det-ærlige-kapitlet"
+  },
+  {
+    "id": "the-last-search-for-a-home",
+    "title": "Francesca Cortesi: The Last Search For A Home",
+    "stage": "The Deal Room",
+    "start": "10:35",
+    "end": "11:10",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/the-last-search-for-a-home"
+  },
+  {
+    "id": "break-4",
+    "title": "22 Bishopsgate: Future-Proofing A 61- Storey Building In London",
+    "stage": "Behind The Build",
+    "start": "10:45",
+    "end": "11:05",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/break-4"
+  },
+  {
+    "id": "us-market-entry-roundtable",
+    "title": "Roundtable: New York, New Rules",
+    "stage": "The Board Room",
+    "start": "11:00",
+    "end": "12:00",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/us-market-entry-roundtable"
+  },
+  {
+    "id": "digital-sovereignty-lessons-from-the-battlefield-1",
+    "title": "Mostandskraft i betong: Hva eiendom kan lære fra slagmarken",
+    "stage": "Glasshallen",
+    "start": "11:00",
+    "end": "11:45",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/digital-sovereignty-lessons-from-the-battlefield-1"
+  },
+  {
+    "id": "opening-keynote",
+    "title": "Opening Keynote",
+    "stage": "Founders' Lounge",
+    "start": "11:00",
+    "end": "11:20",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/opening-keynote"
+  },
+  {
+    "id": "waste-is-a-design-failure",
+    "title": "Fremtidens avfallsfrie bygning",
+    "stage": "Behind The Build",
+    "start": "11:05",
+    "end": "11:30",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/waste-is-a-design-failure"
+  },
+  {
+    "id": "market-view-yield-wont-save-you-this-time",
+    "title": "Market Outlook: Yield Compression Won't Save You This Time",
+    "stage": "The Deal Room",
+    "start": "11:10",
+    "end": "11:35",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/market-view-yield-wont-save-you-this-time"
+  },
+  {
+    "id": "case-studies-what-will-buildings-do-for-us",
+    "title": "Case Studies: What Will Buildings Do For Us?",
+    "stage": "Future of Work & Life",
+    "start": "11:10",
+    "end": "11:34",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/case-studies-what-will-buildings-do-for-us"
+  },
+  {
+    "id": "stop-asking-for-more-power",
+    "title": "Energy First Part II: Gridlocked? Put Demand Where It Works",
+    "stage": "Energy First Real Estate",
+    "start": "11:15",
+    "end": "12:10",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/stop-asking-for-more-power"
+  },
+  {
+    "id": "the-100-million-bet-part-1",
+    "title": "The 100 Million Bet - Part 1",
+    "stage": "Founders' Lounge",
+    "start": "11:20",
+    "end": "12:20",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/the-100-million-bet-part-1"
+  },
+  {
+    "id": "akt-iii-da-byggene-fikk-sanser-og-hukommelse",
+    "title": "Praktisk Proptech III: Da byggene fikk sanser og hukommelse",
+    "stage": "Praktisk Proptech",
+    "start": "11:25",
+    "end": "12:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-iii-da-byggene-fikk-sanser-og-hukommelse"
+  },
+  {
+    "id": "resilience-is-maintained-or-lost",
+    "title": "Resilience in Buildings Is Maintained - Or Lost",
+    "stage": "Behind The Build",
+    "start": "11:30",
+    "end": "12:03",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/resilience-is-maintained-or-lost"
+  },
+  {
+    "id": "kontoret-etter-ki",
+    "title": "Etter KI: Hva skal vi egentlig på kontoret for?",
+    "stage": "Future of Work & Life",
+    "start": "11:40",
+    "end": "12:15",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/kontoret-etter-ki"
+  },
+  {
+    "id": "your-ai-strategy-is-already-obsolete",
+    "title": "Antony Slumbers: Your AI Strategy Is Already Obsolete",
+    "stage": "Glasshallen",
+    "start": "11:45",
+    "end": "12:15",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/your-ai-strategy-is-already-obsolete"
+  },
+  {
+    "id": "shon-lamp-the-data-that-pays",
+    "title": "Shon Lamp: Your AI Is Not Your Advantage (Your Data Is)",
+    "stage": "The Deal Room",
+    "start": "11:50",
+    "end": "12:20",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/shon-lamp-the-data-that-pays"
+  },
+  {
+    "id": "roundtable-spir-group",
+    "title": "Spir Group Roundtable: Morgendagens boligeierskap",
+    "stage": "The Board Room",
+    "start": "12:00",
+    "end": "13:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/roundtable-spir-group"
+  },
+  {
+    "id": "follow-the-green-umbrella-norsk",
+    "title": "Follow The Green Umbrella - Norsk",
+    "stage": "Side Events",
+    "start": "12:00",
+    "end": "13:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/follow-the-green-umbrella-norsk"
+  },
+  {
+    "id": "redi-before-ai-fix-the-basics",
+    "title": "The Digital Manifesto",
+    "stage": "Behind The Build",
+    "start": "12:05",
+    "end": "13:00",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/redi-before-ai-fix-the-basics"
+  },
+  {
+    "id": "dont-just-host-it-build-it",
+    "title": "Energy First Part III: Don't Just Host It. Build It",
+    "stage": "Energy First Real Estate",
+    "start": "12:10",
+    "end": "13:07",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/dont-just-host-it-build-it"
+  },
+  {
+    "id": "real-estate-innovation-project-of-the-year-part-i",
+    "title": "Real Estate Innovator Finalists: Teknostallen, Spinn & Construction City",
+    "stage": "Glasshallen",
+    "start": "12:15",
+    "end": "12:45",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/real-estate-innovation-project-of-the-year-part-i"
+  },
+  {
+    "id": "akt-iv-bevismaterialet",
+    "title": "Praktisk Proptech IV: Bevismaterialet",
+    "stage": "Praktisk Proptech",
+    "start": "12:15",
+    "end": "13:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-iv-bevismaterialet"
+  },
+  {
+    "id": "betting-on-the-ai-native-real-estate-industry",
+    "title": "Betting On The AI-Native Real Estate Industry",
+    "stage": "Founders' Lounge",
+    "start": "12:20",
+    "end": "12:45",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/betting-on-the-ai-native-real-estate-industry"
+  },
+  {
+    "id": "you-have-a-new-colleague",
+    "title": "The Agentic Future: You Have A New Colleague",
+    "stage": "The Deal Room",
+    "start": "12:20",
+    "end": "12:50",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/you-have-a-new-colleague"
+  },
+  {
+    "id": "compact-living-less-space-more-life",
+    "title": "Compact Living: Less space. More life.",
+    "stage": "Future of Work & Life",
+    "start": "12:20",
+    "end": "13:00",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/compact-living-less-space-more-life"
+  },
+  {
+    "id": "knut-ramstad-building-concensus",
+    "title": "Knut Ramstad: Building Concensus",
+    "stage": "Scene ikke oppgitt",
+    "start": "13:00",
+    "end": "13:30",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/knut-ramstad-building-concensus"
+  },
+  {
+    "id": "lunch-mingle-3",
+    "title": "Lunch & Mingle",
+    "stage": "All stages",
+    "start": "13:00",
+    "end": "14:00",
+    "language": "",
+    "type": "break",
+    "href": "https://proptechsummit.no/program/lunch-mingle-3"
+  },
+  {
+    "id": "the-100-million-bet-part-2",
+    "title": "The 100 Million Bet - Part 2",
+    "stage": "Founders' Lounge",
+    "start": "13:45",
+    "end": "14:15",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/the-100-million-bet-part-2"
+  },
+  {
+    "id": "uk-market-entry-roundtable",
+    "title": "UK Market Entry Roundtable",
+    "stage": "The Board Room",
+    "start": "14:00",
+    "end": "15:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/uk-market-entry-roundtable"
+  },
+  {
+    "id": "follow-the-green-umbrella-english",
+    "title": "Follow The Green Umbrella - English",
+    "stage": "Side Events",
+    "start": "14:00",
+    "end": "15:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/follow-the-green-umbrella-english"
+  },
+  {
+    "id": "akt-v-folka-og-den-smarte-investeringen",
+    "title": "Praktisk Proptech V: Menneskene, leietakeren og den smarte investeringen",
+    "stage": "Praktisk Proptech",
+    "start": "14:00",
+    "end": "14:40",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-v-folka-og-den-smarte-investeringen"
+  },
+  {
+    "id": "build-once",
+    "title": "The Cost of Broken Information",
+    "stage": "Behind The Build",
+    "start": "14:00",
+    "end": "14:50",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/build-once"
+  },
+  {
+    "id": "built-for-the-bad-days",
+    "title": "Hva skjer når normalen slutter å være normal?",
+    "stage": "Future of Work & Life",
+    "start": "14:00",
+    "end": "15:05",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/built-for-the-bad-days"
+  },
+  {
+    "id": "bolig-norges-helsesjekk",
+    "title": "LIVE! Tilstand Norge 2026 - Norges første helsetilstandsrapport for boligmarkedet",
+    "stage": "The Deal Room",
+    "start": "14:00",
+    "end": "14:40",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/bolig-norges-helsesjekk"
+  },
+  {
+    "id": "own-the-stack",
+    "title": "Energy First Part IV: Own The Stack",
+    "stage": "Energy First Real Estate",
+    "start": "14:10",
+    "end": "15:00",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/own-the-stack"
+  },
+  {
+    "id": "ett-år-120-millioner",
+    "title": "Operasjon Kostnadskutt: Kutt før du bygger",
+    "stage": "Glasshallen",
+    "start": "14:15",
+    "end": "15:45",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/ett-år-120-millioner"
+  },
+  {
+    "id": "after-the-100-million-bet",
+    "title": "After The 100 Million Bet",
+    "stage": "Founders' Lounge",
+    "start": "14:15",
+    "end": "14:40",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/after-the-100-million-bet"
+  },
+  {
+    "id": "lightning-showcase-follow-the-deal",
+    "title": "Den nye transaksjonsstacken",
+    "stage": "The Deal Room",
+    "start": "14:40",
+    "end": "15:30",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/lightning-showcase-follow-the-deal"
+  },
+  {
+    "id": "akt-vi-bygget-som-kraftverk",
+    "title": "Praktisk Proptech VI: Bygget som kraftverk",
+    "stage": "Praktisk Proptech",
+    "start": "14:40",
+    "end": "15:15",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-vi-bygget-som-kraftverk"
+  },
+  {
+    "id": "superconnectors-real-estate",
+    "title": "SuperConnectors: Real Estate",
+    "stage": "Founders' Lounge",
+    "start": "14:40",
+    "end": "16:10",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/superconnectors-real-estate"
+  },
+  {
+    "id": "ai-leaves-the-office-and-enters-the-building-site",
+    "title": "AI Leaves The Office - And Enters The Building Site",
+    "stage": "Behind The Build",
+    "start": "14:50",
+    "end": "15:22",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/ai-leaves-the-office-and-enters-the-building-site"
+  },
+  {
+    "id": "if-forsikring-roundtable",
+    "title": "If Forsikring Roundtable",
+    "stage": "The Board Room",
+    "start": "15:00",
+    "end": "16:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/if-forsikring-roundtable"
+  },
+  {
+    "id": "fra-etterslep-til-innsikt",
+    "title": "Fra etterslep til innsikt og verdi",
+    "stage": "Future of Work & Life",
+    "start": "15:10",
+    "end": "15:40",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/fra-etterslep-til-innsikt"
+  },
+  {
+    "id": "akt-vii-veien-videre-når-kundene-bygger-selv",
+    "title": "Praktisk Proptech VII: Veien videre (når kundene bygger selv)",
+    "stage": "Praktisk Proptech",
+    "start": "15:15",
+    "end": "16:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/akt-vii-veien-videre-når-kundene-bygger-selv"
+  },
+  {
+    "id": "where-is-the-second-mover",
+    "title": "Where is The Second Mover?",
+    "stage": "Behind The Build",
+    "start": "15:30",
+    "end": "16:15",
+    "language": "en",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/where-is-the-second-mover"
+  },
+  {
+    "id": "where-the-deal-is-moving",
+    "title": "Where The Deal Is Moving",
+    "stage": "The Deal Room",
+    "start": "15:30",
+    "end": "16:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/where-the-deal-is-moving"
+  },
+  {
+    "id": "reality-check",
+    "title": "Realitetsjekken",
+    "stage": "Future of Work & Life",
+    "start": "15:45",
+    "end": "16:00",
+    "language": "no",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/reality-check"
+  },
+  {
+    "id": "summit-afterwork-at-vicini",
+    "title": "Summit Afterwork at Vicini",
+    "stage": "Side Events",
+    "start": "16:00",
+    "end": "18:00",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/summit-afterwork-at-vicini"
+  },
+  {
+    "id": "oslo-innovation-fest",
+    "title": "Oslo Innovation Fest @ Pakkhuset",
+    "stage": "Side Events",
+    "start": "18:00",
+    "end": "00:40",
+    "language": "",
+    "type": "session",
+    "href": "https://proptechsummit.no/program/oslo-innovation-fest"
+  }
+]

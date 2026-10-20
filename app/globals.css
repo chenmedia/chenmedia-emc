@@ -1,0 +1,120 @@
+@import "../src/styles/global.css";
+
+.ui-card {
+  padding: 18px;
+  border: 1px solid hsl(var(--line));
+  border-radius: var(--ui-radius-card);
+  background: hsl(var(--surface));
+}
+
+.ui-button,
+.ui-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-control);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 750;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+
+.ui-button--primary { background: hsl(var(--brand-solid)); color: white; }
+.ui-button--primary:hover { background: hsl(var(--brand)); }
+.ui-button--outline { border-color: hsl(var(--line)); background: hsl(var(--surface)); color: hsl(var(--ink)); }
+.ui-button--outline:hover, .ui-button--ghost:hover { background: hsl(var(--surface-muted)); }
+.ui-button--secondary { border-color: hsl(var(--brand) / .18); background: hsl(var(--brand-soft)); color: hsl(var(--brand-solid)); }
+.ui-button--ghost { background: transparent; color: hsl(var(--ink-soft)); }
+.ui-button--small { min-height: 36px; padding: 0 11px; }
+.ui-icon-button { width: 38px; min-height: 38px; padding: 0; background: transparent; color: hsl(var(--ink-soft)); }
+.ui-icon-button:hover { background: hsl(var(--surface-muted)); color: hsl(var(--ink)); }
+
+input,
+.search-wrap input {
+  min-height: 40px;
+  border: 1px solid hsl(var(--line));
+  border-radius: var(--ui-radius-control);
+  background: hsl(var(--surface));
+  color: hsl(var(--ink));
+  padding: 0 11px;
+}
+
+.search-wrap > svg {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: hsl(var(--ink-muted));
+  pointer-events: none;
+}
+
+.sync-badge {
+  padding: 7px 10px;
+  border: 1px solid hsl(var(--line));
+  border-radius: 999px;
+  background: hsl(var(--surface-muted));
+  color: hsl(var(--ink-soft));
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sync-badge i { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--warning)); }
+.sync-badge--synced { border-color: hsl(var(--success) / .25); background: hsl(var(--success) / .08); color: hsl(var(--success)); }
+.sync-badge--synced i { background: hsl(var(--success)); }
+.sync-badge--saving i { background: hsl(var(--accent)); animation: pulse 1s ease-in-out infinite; }
+.sync-badge--offline { border-color: hsl(var(--danger) / .25); background: hsl(var(--danger) / .07); color: hsl(var(--danger)); }
+.sync-badge--offline i { background: hsl(var(--danger)); }
+
+.photographer-dialog {
+  border: 1px solid hsl(var(--line));
+  border-radius: 12px;
+  background: hsl(var(--surface));
+  color: hsl(var(--ink));
+  box-shadow: 0 24px 70px hsl(var(--ink) / .18);
+}
+
+.photographer-dialog:not([open]) { display: none; }
+.form-field > label { color: hsl(var(--ink-soft)); font-size: 11px; font-weight: 750; }
+.form-field input { width: 100%; }
+
+.toast-region { position: fixed; z-index: 100; top: 96px; right: 24px; display: grid; gap: 8px; width: min(360px, calc(100vw - 32px)); pointer-events: none; }
+.toast { padding: 13px 15px; border: 1px solid hsl(var(--line)); border-radius: 9px; background: hsl(var(--surface)); box-shadow: 0 15px 35px hsl(var(--ink) / .13); }
+.toast strong { display: block; margin-bottom: 2px; font-size: 12px; }
+.toast span { color: hsl(var(--ink-soft)); font-size: 11px; line-height: 1.4; }
+.toast--success { border-left: 4px solid hsl(var(--success)); }
+.toast--destructive { border-left: 4px solid hsl(var(--danger)); }
+
+@keyframes pulse { 50% { opacity: .35; transform: scale(.82); } }
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: hsl(var(--surface-muted));
+}
+
+.auth-card {
+  width: min(440px, 100%);
+  padding: 32px;
+  border: 1px solid hsl(var(--line));
+  border-radius: 14px;
+  background: hsl(var(--surface));
+  box-shadow: 0 24px 70px hsl(var(--ink) / .1);
+}
+
+.auth-card h1 { margin: 10px 0 8px; font-size: clamp(24px, 5vw, 36px); }
+.auth-card > p { color: hsl(var(--ink-soft)); line-height: 1.55; }
+.auth-form { display: grid; gap: 10px; margin: 24px 0 18px; }
+.auth-form label { color: hsl(var(--ink-soft)); font-size: 12px; font-weight: 750; }
+.auth-message { padding: 11px 12px; border-radius: 8px; background: hsl(var(--brand-soft)); color: hsl(var(--brand-solid)) !important; }
+
+@media (max-width: 820px) {
+  .sync-badge { display: inline-flex; }
+  .toast-region { top: 78px; right: 16px; }
+}
