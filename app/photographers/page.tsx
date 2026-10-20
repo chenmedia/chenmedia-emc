@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- Full reload reinitializes the shared planning runtime between workspaces. */
-import { ArrowLeft, CalendarDays, MapPin, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, History, MapPin, Users } from "lucide-react";
 import AuthControl from "@/components/auth-control";
+import { isEditor } from "@/lib/auth";
 import { plannerProgram } from "@/lib/planner-program";
 import FrameOpsBootstrap from "../frameops-bootstrap";
 
-export default function PhotographerPlansPage() {
+export default async function PhotographerPlansPage() {
+  const canEdit = await isEditor();
   return <>
     <header className="topbar">
       <a className="topbar__brand topbar__brand-link" href="/" aria-label="Til bemanningsplanen">
@@ -18,7 +20,7 @@ export default function PhotographerPlansPage() {
     <main className="app-shell photographer-plans-page">
       <section className="page-heading photographer-plans-page__heading" aria-labelledby="photographer-overview-title">
         <div><p className="eyebrow">OPERATIVE KJØREPLANER</p><h1 id="photographer-overview-title">Fotografplaner</h1><p className="lede">Velg fotograf for å se hele arbeidsdagen, tidslinjen og kundeprioriteringene uten støy fra hovedprogrammet.</p></div>
-        <div className="page-heading__actions"><a href="/" className="ui-button ui-button--outline"><ArrowLeft size={16} aria-hidden="true" /> Til bemanningsplan</a></div>
+        <div className="page-heading__actions">{canEdit && <a href="/history" className="ui-button ui-button--outline"><History size={16} aria-hidden="true" /> Endringshistorikk</a>}<a href="/" className="ui-button ui-button--outline"><ArrowLeft size={16} aria-hidden="true" /> Til bemanningsplan</a></div>
       </section>
 
       <section className="photographer-overview photographer-overview--standalone" id="photographer-overview" aria-labelledby="photographer-overview-title">
