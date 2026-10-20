@@ -34,6 +34,40 @@
 .ui-icon-button { width: 38px; min-height: 38px; padding: 0; background: transparent; color: hsl(var(--ink-soft)); }
 .ui-icon-button:hover { background: hsl(var(--surface-muted)); color: hsl(var(--ink)); }
 
+.theme-toggle {
+  position: fixed;
+  z-index: 90;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid hsl(var(--line));
+  border-radius: 9px;
+  background: hsl(var(--surface));
+  box-shadow: 0 8px 24px hsl(var(--ink) / .12);
+}
+
+.theme-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: hsl(var(--ink-muted));
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.theme-toggle button:hover { color: hsl(var(--ink)); }
+.theme-toggle button.is-active { background: hsl(var(--brand-soft)); color: hsl(var(--brand-solid)); }
+
 input,
 .search-wrap input {
   min-height: 40px;
@@ -118,4 +152,7 @@ input,
 @media (max-width: 820px) {
   .sync-badge { display: inline-flex; }
   .toast-region { top: 78px; right: 16px; }
+  .theme-toggle { right: 12px; bottom: 12px; }
+  .theme-toggle button { width: 34px; padding: 0; }
+  .theme-toggle button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
