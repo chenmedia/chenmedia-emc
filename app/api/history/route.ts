@@ -24,7 +24,10 @@ export async function GET() {
   try {
     const sql = getDatabase();
     await ensureHistorySchema(sql);
-    const [current] = await sql`SELECT revision FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ revision: number }>;
+    const [current] = await sql`SELECT state, revision FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: StoredPlannerState; revision: number }>;
+    if (current) {
+      await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Startpunkt da endringshistorikken ble aktivert."]);
+    }
     const rows = await sql`
       SELECT revision, action, changes, changed_at, changed_by,
              jsonb_array_length(state->'photographers')::int AS photographer_count,
