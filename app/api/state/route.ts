@@ -1,9 +1,9 @@
 import { isEditor } from "@/lib/auth";
 import { getDatabase } from "@/lib/neon";
+import { describeStateChanges, ensureHistorySchema, EVENT_KEY, recordHistoryVersion } from "@/lib/planner-history";
 
 export const dynamic = "force-dynamic";
 
-const EVENT_KEY = "oslo-proptech-summit-2026";
 const EMPTY_STATE = { photographers: [], assignments: {} };
 
 type PlannerState = {
@@ -108,6 +108,11 @@ export async function POST(request: Request) {
 
   try {
     const sql = getDatabase();
+    await ensureHistorySchema(sql);
+    const [previous] = await sql`SELECT state, revision FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: PlannerState; revision: number }>;
+    if (previous) {
+      await recordHistoryVersion(sql, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringshistorikken ble aktivert."]);
+    }
     const serialized = JSON.stringify(state);
     const [saved] = await sql`
       INSERT INTO event_states (event_key, state, revision, updated_at, updated_by)
@@ -119,6 +124,8 @@ export async function POST(request: Request) {
         updated_by = EXCLUDED.updated_by
       RETURNING revision, updated_at
     ` as Array<{ revision: number; updated_at: string }>;
+
+    await recordHistoryVersion(sql, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state));
 
     return json({ ok: true, revision: saved.revision, updatedAt: saved.updated_at });
   } catch (error) {
