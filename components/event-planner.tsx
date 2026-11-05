@@ -25,7 +25,7 @@ export default function EventPlanner({ event, canEdit }: Props) {
   return <div className="emc-daisy">
     <a className="skip-link" href="#schedule">Gå til bemanningsplan</a>
     <header className="topbar navbar">
-      <a className="topbar__brand topbar__brand-link" href="/events" aria-label="Til eventoversikten"><img src={event.logoUrl} width="126" height="66" alt={event.name} /><div className="brand-divider" aria-hidden="true" /><div><span className="product-kicker">EMC</span><strong>Eventphoto Mission Control</strong></div></a>
+      <a className="topbar__brand topbar__brand-link" href="/events" aria-label="Til eventoversikten"><img src={event.logoUrl} width="126" height="66" alt={event.name} /><div className="brand-divider" aria-hidden="true" /><div><span className="product-kicker">EMC</span><strong>Event Mission Control</strong></div></a>
       <div className="topbar__meta"><a className="event-switcher" href="/events"><LayoutGrid size={15} aria-hidden="true" /><span><small>AKTIVT EVENT</small>{event.name}</span></a><span><CalendarDays size={15} aria-hidden="true" /> {dateLabel}</span><span><MapPin size={15} aria-hidden="true" /> {event.venue}</span><span id="sync-status" className="sync-badge sync-badge--loading" role="status" aria-live="polite"><i /> Kobler til…</span><AuthControl /></div>
     </header>
 

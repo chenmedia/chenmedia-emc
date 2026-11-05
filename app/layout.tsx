@@ -3,7 +3,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "EMC · Eventphoto Mission Control",
+  title: "EMC · Event Mission Control",
   description: "Operativ og synkronisert bemanningsplan for fototeam på konferanser og eventer.",
   robots: { index: false, follow: false, noarchive: true },
   icons: {

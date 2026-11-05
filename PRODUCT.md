@@ -1,4 +1,4 @@
-# Eventphoto Mission Control
+# Event Mission Control
 
 <!-- impeccable:product-schema 1 -->
 
@@ -34,7 +34,7 @@ EMC is used before and during conferences, summits, tradeshows, festivals, and c
 
 ## Brand Commitments
 
-The product name is Eventphoto Mission Control (EMC). The Oslo Proptech Summit identity and teal-led event palette remain recognizable. Interface language is concise, operational, and primarily Norwegian.
+The product name is Event Mission Control (EMC), with Chen Media as the service brand. Individual event identities remain visible inside their own workspaces and dashboard entries. Interface language is concise, operational, and primarily Norwegian.
 
 ## Evidence on Hand
 

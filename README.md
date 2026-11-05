@@ -1,6 +1,6 @@
-# Eventphoto Mission Control — EMC
+# Event Mission Control — EMC
 
-Eventphoto Mission Control for Oslo Proptech Summit 2026.
+Event Mission Control for planning event photography teams across conferences and live productions.
 
 EMC gir fotoleder en samlet programoversikt med scene-, partner- og
 kundeprioritetsfiltre, teamregister, tildelinger ved start/slutt/hele
