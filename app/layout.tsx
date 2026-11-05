@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "EMC · Eventphoto Mission Control",
-  description: "Operativ og synkronisert bemanningsplan for fototeam under Oslo Proptech Summit 2026.",
+  description: "Operativ og synkronisert bemanningsplan for fototeam på konferanser og eventer.",
   robots: { index: false, follow: false, noarchive: true },
   icons: {
     icon: "/favicon.svg",

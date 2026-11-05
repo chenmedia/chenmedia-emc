@@ -113,7 +113,7 @@ export async function POST(request: Request) {
     await ensureHistorySchema(sql);
     const [previous] = await sql`SELECT state, revision, updated_by FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: PlannerState; revision: number; updated_by: string }>;
     if (previous) {
-      await recordHistoryVersion(sql, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringshistorikken ble aktivert."], previous.updated_by || "Redaktør");
+      await recordHistoryVersion(sql, EVENT_KEY, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringshistorikken ble aktivert."], previous.updated_by || "Redaktør");
     }
     const serialized = JSON.stringify(state);
     const [saved] = await sql`
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
       RETURNING revision, updated_at
     ` as Array<{ revision: number; updated_at: string }>;
 
-    await recordHistoryVersion(sql, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state), changedBy);
+    await recordHistoryVersion(sql, EVENT_KEY, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state), changedBy);
 
     return json({ ok: true, revision: saved.revision, updatedAt: saved.updated_at });
   } catch (error) {

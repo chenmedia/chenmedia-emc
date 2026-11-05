@@ -33,9 +33,28 @@ type PlannerState = {
   assignments: Record<string, Assignment>
 }
 
-const STORAGE_KEY = 'frameops-mvp-v1'
-const FILTER_STORAGE_KEY = 'frameops-filters-v1'
-const STATE_ENDPOINT = '/api/state'
+type EventContext = {
+  slug: string
+  name: string
+  venue: string
+  dateLabel: string
+  timezone: string
+  stateEndpoint: string
+  historyEndpoint: string
+}
+
+const eventContext = JSON.parse(document.querySelector<HTMLScriptElement>('#event-context')?.textContent || JSON.stringify({
+  slug: 'oslo-proptech-summit-2026',
+  name: 'Oslo Proptech Summit 2026',
+  venue: 'Construction City',
+  dateLabel: '21. oktober 2026',
+  timezone: 'Europe/Oslo',
+  stateEndpoint: '/api/state',
+  historyEndpoint: '/api/history',
+})) as EventContext
+const STORAGE_KEY = `emc-plan-${eventContext.slug}-v1`
+const FILTER_STORAGE_KEY = `emc-filters-${eventContext.slug}-v1`
+const STATE_ENDPOINT = eventContext.stateEndpoint
 const COVERAGE_MINUTES = 15
 const program = JSON.parse(document.querySelector<HTMLScriptElement>('#program-data')?.textContent || '[]') as ProgramItem[]
 const sessionsById = new Map(program.map((session) => [session.id, session]))
@@ -773,7 +792,7 @@ function exportCsv() {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = 'proptech-photo-ops-2026.csv'
+  link.download = `${eventContext.slug}-photo-ops.csv`
   link.click()
   URL.revokeObjectURL(url)
   toast('CSV eksportert', 'Bemanningsplanen er lastet ned.', 'success')
@@ -800,7 +819,7 @@ async function exportMasterPdf() {
     const assignedCount = new Set(assignments.map(({ session }) => session.id)).size
     const coverage = program.length ? Math.round((assignedCount / program.length) * 100) : 0
     const generatedLabel = new Intl.DateTimeFormat('nb-NO', {
-      timeZone: 'Europe/Oslo',
+      timeZone: eventContext.timezone,
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -809,7 +828,7 @@ async function exportMasterPdf() {
     }).format(new Date())
     const planUpdatedLabel = lastRemoteUpdatedAt
       ? new Intl.DateTimeFormat('nb-NO', {
-        timeZone: 'Europe/Oslo',
+        timeZone: eventContext.timezone,
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -837,7 +856,7 @@ async function exportMasterPdf() {
     }
 
     doc.setProperties({
-      title: 'Masterplan - Oslo Proptech Summit 2026',
+      title: `Masterplan - ${eventContext.name}`,
       subject: 'Samlet fotoplan for alle fotografer',
       author: 'Eventphoto Mission Control',
     })
@@ -860,10 +879,10 @@ async function exportMasterPdf() {
     doc.setTextColor(31, 43, 45)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(8.5)
-    doc.text('OSLO PROPTECH SUMMIT 2026', 12, 42)
+    doc.text(eventContext.name.toUpperCase(), 12, 42)
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(7.5)
-    doc.text('21. oktober 2026  /  Construction City', 12, 48)
+    doc.text(`${eventContext.dateLabel}  /  ${eventContext.venue}`, 12, 48)
 
     const cardY = 38
     const cardGap = 3
@@ -1000,7 +1019,7 @@ async function exportMasterPdf() {
       },
     })
 
-    doc.save('fotoplan-master-proptech-2026.pdf')
+    doc.save(`fotoplan-master-${eventContext.slug}.pdf`)
     toast('Master-PDF eksportert', `Samlet plan for ${state.photographers.length} fotografer er lastet ned.`, 'success')
   } catch (error) {
     console.error(error)
@@ -1024,7 +1043,7 @@ async function exportPhotographerPdf(photographerId: string) {
     const pageWidth = doc.internal.pageSize.getWidth()
     const generatedAt = new Date()
     const generatedLabel = new Intl.DateTimeFormat('nb-NO', {
-      timeZone: 'Europe/Oslo',
+      timeZone: eventContext.timezone,
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -1033,7 +1052,7 @@ async function exportPhotographerPdf(photographerId: string) {
     }).format(generatedAt)
     const planUpdatedLabel = lastRemoteUpdatedAt
       ? new Intl.DateTimeFormat('nb-NO', {
-        timeZone: 'Europe/Oslo',
+        timeZone: eventContext.timezone,
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -1061,7 +1080,7 @@ async function exportPhotographerPdf(photographerId: string) {
 
     doc.setProperties({
       title: `Fotoplan - ${person.name}`,
-      subject: 'Oslo Proptech Summit 2026',
+      subject: eventContext.name,
       author: 'Eventphoto Mission Control',
     })
 
@@ -1084,10 +1103,10 @@ async function exportPhotographerPdf(photographerId: string) {
     doc.setTextColor(31, 43, 45)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(9)
-    doc.text('OSLO PROPTECH SUMMIT 2026', 14, 51)
+    doc.text(eventContext.name.toUpperCase(), 14, 51)
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(8)
-    doc.text('21. oktober 2026  /  Construction City', 14, 57)
+    doc.text(`${eventContext.dateLabel}  /  ${eventContext.venue}`, 14, 57)
     doc.text(`Tilgjengelig ${person.from} - ${person.to}  /  Plan oppdatert ${planUpdatedLabel}`, pageWidth - 14, 57, { align: 'right' })
 
     const cardY = 63
@@ -1198,7 +1217,7 @@ async function exportPhotographerPdf(photographerId: string) {
     }
 
     const filename = person.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-    doc.save(`fotoplan-${filename || 'fotograf'}-proptech-2026.pdf`)
+    doc.save(`fotoplan-${filename || 'fotograf'}-${eventContext.slug}.pdf`)
     toast('PDF eksportert', `Fotoplanen til ${person.name} er lastet ned.`, 'success')
   } catch (error) {
     console.error(error)

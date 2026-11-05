@@ -27,7 +27,7 @@ export async function GET() {
     await ensureHistorySchema(sql);
     const [current] = await sql`SELECT state, revision, updated_by FROM event_states WHERE event_key = ${EVENT_KEY}` as Array<{ state: StoredPlannerState; revision: number; updated_by: string }>;
     if (current) {
-      await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Startpunkt da endringshistorikken ble aktivert."], current.updated_by || editorLabel(editor));
+      await recordHistoryVersion(sql, EVENT_KEY, current.state, current.revision, "baseline", ["Startpunkt da endringshistorikken ble aktivert."], current.updated_by || editorLabel(editor));
     }
     const rows = await sql`
       SELECT revision, action, changes, changed_at, changed_by,
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     ` as Array<{ state: StoredPlannerState; revision: number }>;
     if (!current) return json({ error: "Fant ikke den aktive planen." }, 404);
 
-    await recordHistoryVersion(sql, current.state, current.revision, "baseline", ["Sikkerhetskopi før gjenoppretting."], changedBy);
+    await recordHistoryVersion(sql, EVENT_KEY, current.state, current.revision, "baseline", ["Sikkerhetskopi før gjenoppretting."], changedBy);
     const serialized = JSON.stringify(snapshot.state);
     const [restored] = await sql`
       UPDATE event_states
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       WHERE event_key = ${EVENT_KEY}
       RETURNING revision, updated_at
     ` as Array<{ revision: number; updated_at: string }>;
-    await recordHistoryVersion(sql, snapshot.state, restored.revision, "restore", [`Gjenopprettet planen fra revisjon ${revision}.`], changedBy);
+    await recordHistoryVersion(sql, EVENT_KEY, snapshot.state, restored.revision, "restore", [`Gjenopprettet planen fra revisjon ${revision}.`], changedBy);
 
     return json({ ok: true, revision: restored.revision, updatedAt: restored.updated_at, restoredFrom: revision });
   } catch (error) {

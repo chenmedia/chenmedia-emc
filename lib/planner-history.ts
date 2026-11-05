@@ -2,8 +2,9 @@ import "server-only";
 
 import { getDatabase } from "@/lib/neon";
 import { plannerProgram } from "@/lib/planner-program";
+import { DEFAULT_EVENT_SLUG } from "@/lib/events";
 
-export const EVENT_KEY = "oslo-proptech-summit-2026";
+export const EVENT_KEY = DEFAULT_EVENT_SLUG;
 
 export type StoredPlannerState = {
   photographers: Array<{
@@ -20,7 +21,7 @@ export type StoredPlannerState = {
 
 type Sql = ReturnType<typeof getDatabase>;
 
-const sessionNames = new Map(plannerProgram.map((session) => [session.id, session.title]));
+const defaultSessionNames = new Map(plannerProgram.map((session) => [session.id, session.title]));
 let schemaReady: Promise<void> | null = null;
 
 export function ensureHistorySchema(sql: Sql) {
@@ -56,7 +57,11 @@ function timingLabel(timing: "start" | "end" | "whole") {
   return timing === "end" ? "slutt" : timing === "whole" ? "hele programposten" : "start";
 }
 
-export function describeStateChanges(previous: StoredPlannerState | null, next: StoredPlannerState) {
+export function describeStateChanges(
+  previous: StoredPlannerState | null,
+  next: StoredPlannerState,
+  sessionNames: Map<string, string> = defaultSessionNames,
+) {
   if (!previous) return ["Opprettet den sentrale bemanningsplanen."];
 
   const changes: string[] = [];
@@ -91,6 +96,7 @@ export function describeStateChanges(previous: StoredPlannerState | null, next: 
 
 export async function recordHistoryVersion(
   sql: Sql,
+  eventKey: string,
   state: StoredPlannerState,
   revision: number,
   action: "save" | "restore" | "baseline",
@@ -102,7 +108,7 @@ export async function recordHistoryVersion(
   const serializedChanges = JSON.stringify(changes);
   await sql`
     INSERT INTO event_state_history (event_key, revision, state, action, changes, changed_at, changed_by)
-    VALUES (${EVENT_KEY}, ${revision}, ${serializedState}::jsonb, ${action}, ${serializedChanges}::jsonb, NOW(), ${changedBy})
+    VALUES (${eventKey}, ${revision}, ${serializedState}::jsonb, ${action}, ${serializedChanges}::jsonb, NOW(), ${changedBy})
     ON CONFLICT (event_key, revision) DO NOTHING
   `;
 }
