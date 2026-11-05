@@ -858,7 +858,7 @@ async function exportMasterPdf() {
     doc.setProperties({
       title: `Masterplan - ${eventContext.name}`,
       subject: 'Samlet fotoplan for alle fotografer',
-      author: 'Eventphoto Mission Control',
+      author: 'Event Mission Control',
     })
 
     doc.setFillColor(0, 71, 70)
@@ -1081,7 +1081,7 @@ async function exportPhotographerPdf(photographerId: string) {
     doc.setProperties({
       title: `Fotoplan - ${person.name}`,
       subject: eventContext.name,
-      author: 'Eventphoto Mission Control',
+      author: 'Event Mission Control',
     })
 
     doc.setFillColor(0, 71, 70)
