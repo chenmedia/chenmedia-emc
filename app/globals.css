@@ -1,5 +1,11 @@
+@import "tailwindcss";
 @import "../src/styles/global.css";
 @import "../src/styles/site-classic.css";
+@import "../src/styles/daisy-production.css";
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
 
 .ui-card {
   padding: 18px;

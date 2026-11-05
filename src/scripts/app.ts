@@ -1325,6 +1325,14 @@ document.querySelector('#clear-assignments')?.addEventListener('click', clearAss
 document.querySelector('#export-master-pdf')?.addEventListener('click', () => { void exportMasterPdf() })
 document.querySelector('#export-button')?.addEventListener('click', exportCsv)
 
+const mobileFilterButton = document.querySelector<HTMLButtonElement>('#mobile-filter-toggle')
+mobileFilterButton?.addEventListener('click', () => {
+  const panel = document.querySelector<HTMLElement>('#program-filters')
+  if (!panel) return
+  const open = panel.classList.toggle('is-mobile-open')
+  mobileFilterButton.setAttribute('aria-expanded', String(open))
+})
+
 render()
 setSyncStatus('loading', 'Kobler til…')
 void loadRemoteState()
