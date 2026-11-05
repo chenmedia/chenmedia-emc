@@ -1,4 +1,5 @@
 @import "../src/styles/global.css";
+@import "../src/styles/site-classic.css";
 
 .ui-card {
   padding: 18px;
