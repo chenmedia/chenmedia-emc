@@ -24,14 +24,14 @@ const formatter = new Intl.DateTimeFormat("nb-NO", {
   timeZone: "Europe/Oslo",
 });
 
-async function requestHistory() {
-  const response = await fetch("/api/history", { headers: { Accept: "application/json" }, cache: "no-store" });
+async function requestHistory(endpoint: string) {
+  const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
   const payload = await response.json() as HistoryPayload & { error?: string };
   if (!response.ok) throw new Error(payload.error || "Kunne ikke hente historikken.");
   return payload;
 }
 
-export default function HistoryPanel() {
+export default function HistoryPanel({ endpoint = "/api/history" }: { endpoint?: string }) {
   const [data, setData] = useState<HistoryPayload | null>(null);
   const [error, setError] = useState("");
   const [pendingRevision, setPendingRevision] = useState<number | null>(null);
@@ -40,7 +40,7 @@ export default function HistoryPanel() {
 
   async function loadHistory() {
     try {
-      const payload = await requestHistory();
+      const payload = await requestHistory(endpoint);
       setData(payload);
       setError("");
     } catch (reason) {
@@ -50,7 +50,7 @@ export default function HistoryPanel() {
 
   useEffect(() => {
     let active = true;
-    void requestHistory().then((payload) => {
+    void requestHistory(endpoint).then((payload) => {
       if (!active) return;
       setData(payload);
       setError("");
@@ -58,13 +58,13 @@ export default function HistoryPanel() {
       if (active) setError(reason instanceof Error ? reason.message : "Kunne ikke hente historikken.");
     });
     return () => { active = false; };
-  }, []);
+  }, [endpoint]);
 
   async function restore(revision: number) {
     setRestoring(true);
     setError("");
     try {
-      const response = await fetch("/api/history", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({ revision }),

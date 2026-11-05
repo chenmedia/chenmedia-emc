@@ -23,3 +23,23 @@ CREATE TABLE IF NOT EXISTS event_state_history (
 
 CREATE INDEX IF NOT EXISTS event_state_history_event_idx
   ON event_state_history (event_key, revision DESC);
+
+CREATE TABLE IF NOT EXISTS events (
+  event_key TEXT PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  venue TEXT NOT NULL DEFAULT '',
+  starts_on DATE NOT NULL,
+  ends_on DATE NOT NULL,
+  timezone TEXT NOT NULL DEFAULT 'Europe/Oslo',
+  status TEXT NOT NULL DEFAULT 'planning' CHECK (status IN ('draft', 'planning', 'active', 'archived')),
+  logo_url TEXT NOT NULL DEFAULT '/ops-logo.png',
+  program JSONB NOT NULL DEFAULT '[]'::jsonb,
+  stage_colors JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CHECK (ends_on >= starts_on)
+);
+
+CREATE INDEX IF NOT EXISTS events_status_date_idx
+  ON events (status, starts_on DESC);
