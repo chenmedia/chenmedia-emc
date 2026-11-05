@@ -20,7 +20,7 @@
   --radius-box: .9rem;
   --border: 1px;
   min-height: 100vh;
-  background: #f7f7f4;
+  background: #ffffff;
   color: #142626;
   font-family: "Source Sans 3", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
 }
@@ -37,7 +37,7 @@
   min-height: 64px;
   padding: 0 max(24px, calc((100vw - 1460px) / 2));
   border-bottom: 1px solid #deded8;
-  background: #fffdfa;
+  background: #ffffff;
   box-shadow: none;
 }
 
@@ -87,7 +87,7 @@
   margin: 0 0 24px;
   border: 1px solid #deded8;
   border-radius: 15px;
-  background: #fffdfa;
+  background: #ffffff;
   box-shadow: none;
 }
 
@@ -132,7 +132,7 @@
   padding: 17px;
   border: 1px solid #deded8;
   border-radius: 15px;
-  background: #fffdfa;
+  background: #ffffff;
   box-shadow: none;
 }
 
@@ -180,7 +180,7 @@
 .emc-daisy .schedule-panel { min-width: 0; }
 .emc-daisy .schedule-heading { align-items: end; min-height: 48px; padding: 0 0 10px; }
 .emc-daisy .schedule-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; color: #667170; font-size: 10px; font-weight: 700; }
-.emc-daisy .session-list { overflow: hidden; border: 1px solid #deded8; border-radius: 15px; background: #fffdfa; }
+.emc-daisy .session-list { overflow: hidden; border: 1px solid #deded8; border-radius: 15px; background: #ffffff; }
 
 .emc-daisy .session-row {
   display: grid;
@@ -200,7 +200,7 @@
 .emc-daisy .session-row.is-main-partner { border-left: 0; }
 .emc-daisy .session-row.is-customer-priority { box-shadow: none; }
 .emc-daisy .session-row.is-customer-priority::after { display: none; }
-.emc-daisy .session-row.is-customer-priority:not(.is-conflict) { background: color-mix(in oklab, #9946c8 2.5%, #fffdfa); }
+.emc-daisy .session-row.is-customer-priority:not(.is-conflict) { background: color-mix(in oklab, #9946c8 2.5%, #ffffff); }
 .emc-daisy .session-row.is-conflict { background: #fff3f0; }
 .emc-daisy .session-row[hidden] { display: none; }
 
@@ -242,7 +242,7 @@
 
 .emc-daisy .photographer-dialog { width: min(620px, calc(100vw - 28px)); max-width: 620px; padding: 0; border: 0; background: transparent; box-shadow: none; }
 .emc-daisy .photographer-dialog::backdrop { background: rgb(7 28 28 / .48); }
-.emc-daisy .photographer-dialog .modal-box { width: 100%; max-width: none; border: 1px solid #deded8; border-radius: 15px; background: #fffdfa; }
+.emc-daisy .photographer-dialog .modal-box { width: 100%; max-width: none; border: 1px solid #deded8; border-radius: 15px; background: #ffffff; }
 .emc-daisy .photographer-form input,
 .emc-daisy .photographer-form select { width: 100%; border-color: #d8d8d2; background: white; }
 

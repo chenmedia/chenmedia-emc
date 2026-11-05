@@ -8,7 +8,7 @@ type Theme = "light" | "dark";
 const applyTheme = (theme: Theme) => {
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
-  localStorage.setItem("emc-theme", theme);
+  localStorage.setItem("emc-theme-v2", theme);
   window.dispatchEvent(new Event("emc-theme-change"));
 };
 
