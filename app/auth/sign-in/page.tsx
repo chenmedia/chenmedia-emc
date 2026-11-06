@@ -20,22 +20,21 @@ export default async function SignInPage({ searchParams }: Props) {
   return (
     <main className="auth-page">
       <section className="auth-card">
-        <p className="eyebrow">EMC · SIKKER TILGANG</p>
-        <h1>Logg inn som redaktør</h1>
-        <p>Bruk Google-kontoen din. Bare forhåndsgodkjente e-postadresser får redigere den delte planen.</p>
+        <h1>Logg inn til EMC</h1>
+        <p>Tilgangen styres av rollen din. Administratorer administrerer eventer og tilgang, redaktører oppdaterer planer, og seere har lesetilgang.</p>
 
         {!configured && <p className="auth-message auth-message--error" role="alert">Neon Auth mangler nødvendig konfigurasjon.</p>}
-        {configured && !accessConfigured && <p className="auth-message auth-message--error" role="alert">Ingen redaktøradresser er konfigurert ennå.</p>}
+        {configured && !accessConfigured && <p className="auth-message auth-message--error" role="alert">Ingen administratorer er konfigurert ennå.</p>}
         {error === "oauth" && <p className="auth-message auth-message--error" role="alert">Google-innloggingen ble avbrutt eller mislyktes. Prøv igjen.</p>}
 
         {user ? <div className="auth-identity">
           <strong>{user.name}</strong>
           <span>{user.email}</span>
-          <p>Denne Google-kontoen har kun lesetilgang. Logg ut og prøv en godkjent redaktørkonto.</p>
+          <p>Denne kontoen har ingen global administratorrolle. Hvis du er invitert til et event, åpner du eventlenken du har mottatt.</p>
           <form action={signOut}><button className="ui-button ui-button--outline" type="submit">Logg ut</button></form>
         </div> : configured && accessConfigured ? <div className="auth-form"><GoogleSignInButton /></div> : null}
 
-        <Link href="/">Tilbake til planen</Link>
+        <Link href="/events">Til eventoversikten</Link>
       </section>
     </main>
   );
