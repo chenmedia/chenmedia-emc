@@ -28,9 +28,18 @@ type Assignment = {
   timing: CaptureTiming
 }
 
+type TaskProgress = {
+  status: 'done' | 'handoff'
+  reason?: string
+  requestedBy?: string
+  requestedTo?: string
+  requestedAt?: string
+}
+
 type PlannerState = {
   photographers: Photographer[]
   assignments: Record<string, Assignment>
+  taskProgress: Record<string, TaskProgress>
 }
 
 type EventContext = {
@@ -137,8 +146,8 @@ function syncFilterControls() {
 function loadCachedState(): PlannerState {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return { photographers: [], assignments: {} }
-    const parsed = JSON.parse(stored) as { photographers?: unknown; assignments?: Record<string, unknown> }
+    if (!stored) return { photographers: [], assignments: {}, taskProgress: {} }
+    const parsed = JSON.parse(stored) as { photographers?: unknown; assignments?: Record<string, unknown>; taskProgress?: Record<string, unknown> }
     const assignments = Object.fromEntries(
       Object.entries(parsed.assignments || {}).flatMap(([sessionId, value]) => {
         if (typeof value === 'string') {
@@ -158,12 +167,25 @@ function loadCachedState(): PlannerState {
         return []
       }),
     )
+    const taskProgress = Object.fromEntries(Object.entries(parsed.taskProgress || {}).flatMap(([sessionId, value]) => {
+      if (!value || typeof value !== 'object') return []
+      const saved = value as Record<string, unknown>
+      if (saved.status !== 'done' && saved.status !== 'handoff') return []
+      return [[sessionId, {
+        status: saved.status,
+        reason: typeof saved.reason === 'string' ? saved.reason : undefined,
+        requestedBy: typeof saved.requestedBy === 'string' ? saved.requestedBy : undefined,
+        requestedTo: typeof saved.requestedTo === 'string' ? saved.requestedTo : undefined,
+        requestedAt: typeof saved.requestedAt === 'string' ? saved.requestedAt : undefined,
+      } satisfies TaskProgress]]
+    }))
     return {
       photographers: Array.isArray(parsed.photographers) ? parsed.photographers : [],
       assignments,
+      taskProgress,
     }
   } catch {
-    return { photographers: [], assignments: {} }
+    return { photographers: [], assignments: {}, taskProgress: {} }
   }
 }
 
@@ -179,7 +201,7 @@ function setSyncStatus(mode: 'loading' | 'saving' | 'synced' | 'offline', label:
 }
 
 function hasPlannerData(value: PlannerState) {
-  return value.photographers.length > 0 || Object.keys(value.assignments).length > 0
+  return value.photographers.length > 0 || Object.keys(value.assignments).length > 0 || Object.keys(value.taskProgress).length > 0
 }
 
 async function loadRemoteState(showUpdateToast = false) {

@@ -6,7 +6,7 @@ import { describeStateChanges, ensureHistorySchema, recordHistoryVersion, type S
 
 export const dynamic = "force-dynamic";
 
-const EMPTY_STATE: StoredPlannerState = { photographers: [], assignments: {} };
+const EMPTY_STATE: StoredPlannerState = { photographers: [], assignments: {}, taskProgress: {} };
 
 type RouteContext = { params: Promise<{ eventSlug: string }> };
 type EventStateRow = { state: StoredPlannerState; revision: number; updated_at: string; updated_by: string };
@@ -49,7 +49,20 @@ function cleanState(input: unknown): StoredPlannerState | null {
     return [[sessionId.slice(0, 160), { photographerId: value.photographerId, timing }]];
   })) as StoredPlannerState["assignments"];
 
-  return { photographers, assignments };
+  const taskProgress = Object.fromEntries(Object.entries(candidate.taskProgress || {}).flatMap(([sessionId, progress]) => {
+    if (!progress || typeof progress !== "object") return [];
+    const value = progress as Record<string, unknown>;
+    if (value.status !== "done" && value.status !== "handoff") return [];
+    return [[sessionId.slice(0, 160), {
+      status: value.status,
+      reason: typeof value.reason === "string" ? value.reason.trim().slice(0, 160) : undefined,
+      requestedBy: typeof value.requestedBy === "string" && photographerIds.has(value.requestedBy) ? value.requestedBy : undefined,
+      requestedTo: typeof value.requestedTo === "string" && photographerIds.has(value.requestedTo) ? value.requestedTo : undefined,
+      requestedAt: typeof value.requestedAt === "string" ? value.requestedAt.slice(0, 40) : undefined,
+    }]];
+  })) as NonNullable<StoredPlannerState["taskProgress"]>;
+
+  return { photographers, assignments, taskProgress };
 }
 
 export async function GET(_request: Request, context: RouteContext) {
@@ -64,8 +77,9 @@ export async function GET(_request: Request, context: RouteContext) {
     ` as EventStateRow[];
     if (!row) return json({ exists: false, state: EMPTY_STATE, revision: 0, updatedAt: null, canEdit });
 
-    const visibleState = canEdit ? row.state : {
-      ...row.state,
+    const normalizedState = { ...row.state, taskProgress: row.state.taskProgress || {} };
+    const visibleState = canEdit ? normalizedState : {
+      ...normalizedState,
       photographers: row.state.photographers.map((person) => ({ ...person, phone: "" })),
     };
     return json({ exists: true, state: visibleState, revision: row.revision, updatedAt: row.updated_at, canEdit });

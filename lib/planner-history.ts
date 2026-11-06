@@ -17,6 +17,13 @@ export type StoredPlannerState = {
     color: string;
   }>;
   assignments: Record<string, { photographerId: string; timing: "start" | "end" | "whole" }>;
+  taskProgress?: Record<string, {
+    status: "done" | "handoff";
+    reason?: string;
+    requestedBy?: string;
+    requestedTo?: string;
+    requestedAt?: string;
+  }>;
 };
 
 type Sql = ReturnType<typeof getDatabase>;
@@ -89,6 +96,17 @@ export function describeStateChanges(
     } else if (before && after && (before.photographerId !== after.photographerId || before.timing !== after.timing)) {
       changes.push(`Endret «${title}» fra ${photographerName(previous, before.photographerId)} (${timingLabel(before.timing)}) til ${photographerName(next, after.photographerId)} (${timingLabel(after.timing)}).`);
     }
+  });
+
+  const progressIds = new Set([...Object.keys(previous.taskProgress || {}), ...Object.keys(next.taskProgress || {})]);
+  progressIds.forEach((sessionId) => {
+    const before = previous.taskProgress?.[sessionId];
+    const after = next.taskProgress?.[sessionId];
+    const title = sessionNames.get(sessionId) || sessionId;
+    if (before?.status !== "done" && after?.status === "done") changes.push(`Markerte «${title}» som fotografert.`);
+    else if (before?.status === "done" && !after) changes.push(`Åpnet «${title}» igjen.`);
+    else if (before?.status !== "handoff" && after?.status === "handoff") changes.push(`Ba om avløsning for «${title}».`);
+    else if (before?.status === "handoff" && !after) changes.push(`Avsluttet avløsningsforespørselen for «${title}».`);
   });
 
   return changes.length ? changes : ["Lagret planen uten synlige bemanningsendringer."];

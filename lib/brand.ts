@@ -2,3 +2,4 @@ export const CHEN_MEDIA_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAR
 
 export const PRODUCT_NAME = "Event Mission Control";
 export const PRODUCT_SHORT_NAME = "EMC";
+export const PRODUCT_PARENT_NAME = "FrameOps";

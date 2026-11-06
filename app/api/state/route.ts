@@ -1,10 +1,10 @@
 import { editorLabel, getEditor, isEditor } from "@/lib/auth";
 import { getDatabase } from "@/lib/neon";
-import { describeStateChanges, ensureHistorySchema, EVENT_KEY, recordHistoryVersion } from "@/lib/planner-history";
+import { describeStateChanges, ensureHistorySchema, EVENT_KEY, recordHistoryVersion, type StoredPlannerState } from "@/lib/planner-history";
 
 export const dynamic = "force-dynamic";
 
-const EMPTY_STATE = { photographers: [], assignments: {} };
+const EMPTY_STATE = { photographers: [], assignments: {}, taskProgress: {} };
 
 type PlannerState = {
   photographers: Array<{
@@ -17,6 +17,7 @@ type PlannerState = {
     color: string;
   }>;
   assignments: Record<string, { photographerId: string; timing: "start" | "end" | "whole" }>;
+  taskProgress?: StoredPlannerState["taskProgress"];
 };
 
 type EventStateRow = {
@@ -66,7 +67,20 @@ function cleanState(input: unknown): PlannerState | null {
     return [[sessionId.slice(0, 160), { photographerId: value.photographerId, timing }]];
   })) as PlannerState["assignments"];
 
-  return { photographers, assignments };
+  const taskProgress = Object.fromEntries(Object.entries(candidate.taskProgress || {}).flatMap(([sessionId, progress]) => {
+    if (!progress || typeof progress !== "object") return [];
+    const value = progress as Record<string, unknown>;
+    if (value.status !== "done" && value.status !== "handoff") return [];
+    return [[sessionId.slice(0, 160), {
+      status: value.status,
+      reason: typeof value.reason === "string" ? value.reason.trim().slice(0, 160) : undefined,
+      requestedBy: typeof value.requestedBy === "string" && photographerIds.has(value.requestedBy) ? value.requestedBy : undefined,
+      requestedTo: typeof value.requestedTo === "string" && photographerIds.has(value.requestedTo) ? value.requestedTo : undefined,
+      requestedAt: typeof value.requestedAt === "string" ? value.requestedAt.slice(0, 40) : undefined,
+    }]];
+  })) as NonNullable<StoredPlannerState["taskProgress"]>;
+
+  return { photographers, assignments, taskProgress };
 }
 
 export async function GET() {
@@ -75,8 +89,9 @@ export async function GET() {
     const [row] = await sql`SELECT state, revision, updated_at FROM event_states WHERE event_key = ${EVENT_KEY}` as EventStateRow[];
     if (!row) return json({ exists: false, state: EMPTY_STATE, revision: 0, updatedAt: null, canEdit });
 
-    const visibleState = canEdit ? row.state : {
-      ...row.state,
+    const normalizedState = { ...row.state, taskProgress: row.state.taskProgress || {} };
+    const visibleState = canEdit ? normalizedState : {
+      ...normalizedState,
       photographers: row.state.photographers.map((person) => ({ ...person, phone: "" })),
     };
 

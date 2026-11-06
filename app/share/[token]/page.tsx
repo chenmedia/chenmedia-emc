@@ -7,7 +7,11 @@ import { getDatabase } from "@/lib/neon";
 export const dynamic = "force-dynamic";
 
 type ShareRow = { event_key: string; photographer_id: string; last_viewed_revision: number };
-type PlannerState = { photographers: Array<{ id: string; name: string; phone: string; role: string; from: string; to: string; color: string }>; assignments: Record<string, { photographerId: string; timing: "start" | "end" | "whole" }> };
+type PlannerState = {
+  photographers: Array<{ id: string; name: string; phone: string; role: string; from: string; to: string; color: string }>;
+  assignments: Record<string, { photographerId: string; timing: "start" | "end" | "whole" }>;
+  taskProgress?: Record<string, { status: "done" | "handoff"; reason?: string; requestedBy?: string; requestedTo?: string; requestedAt?: string }>;
+};
 
 export default async function SharedPlanPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -27,5 +31,6 @@ export default async function SharedPlanPage({ params }: { params: Promise<{ tok
   ` as Array<{ changes: string[] }>;
   const changes = history.flatMap((entry) => Array.isArray(entry.changes) ? entry.changes : []).filter((change) => change && !change.toLowerCase().includes("startpunkt"));
   await sql`UPDATE event_shares SET last_viewed_revision = ${stateRow[0].revision} WHERE token = ${token}`;
-  return <div className="emc-daisy shared-plan-page"><SharedPhotographerPlan event={event} photographer={photographer} assignments={stateRow[0].state.assignments} revision={stateRow[0].revision} changes={[...new Set(changes)]} lastViewedRevision={share.last_viewed_revision} /></div>;
+  const photographers = stateRow[0].state.photographers.map((person) => ({ id: person.id, name: person.name, role: person.role, from: person.from, to: person.to, color: person.color }));
+  return <div className="emc-daisy shared-plan-page"><SharedPhotographerPlan event={event} photographer={photographer} photographers={photographers} assignments={stateRow[0].state.assignments} taskProgress={stateRow[0].state.taskProgress || {}} shareToken={token} revision={stateRow[0].revision} changes={[...new Set(changes)]} lastViewedRevision={share.last_viewed_revision} /></div>;
 }

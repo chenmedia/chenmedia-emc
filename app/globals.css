@@ -635,6 +635,41 @@ html { scroll-behavior: smooth; }
 .shared-agenda__number { color: #a8afad; font: 700 11px/1 Sora, sans-serif; }
 .shared-plan__empty { display: grid; justify-items: center; gap: 7px; padding: 48px 20px; border: 1px dashed #c5cdca; border-radius: 14px; color: #657170; text-align: center; }
 .shared-plan__footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 28px; padding-top: 18px; border-top: 1px solid #d8deda; color: #74807f; font-size: 10px; }
+.shared-plan__message { display: flex; align-items: center; gap: 8px; margin: 18px 0; padding: 12px 14px; border: 1px solid #b9d8c8; border-radius: 10px; background: #f1faf5; color: #28654d; font-size: 12px; font-weight: 700; }
+.shared-plan__message--error { border-color: #e4b9b2; background: #fff4f2; color: #a53c2d; }
+.shared-handoff-request { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; margin: 20px 0; padding: 16px; border: 1px solid #e2c98d; border-radius: 12px; background: #fffaf0; color: #624812; }
+.shared-handoff-request > div:nth-child(2) { display: grid; gap: 3px; }
+.shared-handoff-request span, .shared-handoff-request small { color: #756b56; font-size: 10px; }
+.shared-handoff-request p { margin: 0; color: #342f24; font-size: 13px; font-weight: 750; }
+.shared-handoff-request > div:last-child { display: flex; gap: 7px; }
+.shared-active-task { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 18px; margin-top: 22px; padding: 20px; border: 1px solid #bdd9d5; border-radius: 14px; background: #eaf7f5; }
+.shared-active-task > div:first-child { display: grid; gap: 6px; }
+.shared-active-task span { color: #17645f; font-size: 9px; font-weight: 850; letter-spacing: .09em; }
+.shared-active-task h2 { margin: 0; font: 800 19px/1.25 Sora, sans-serif; }
+.shared-active-task p { display: flex; align-items: center; gap: 6px; margin: 0; color: #526a67; font-size: 12px; }
+.shared-active-task > div:last-child { display: grid; gap: 7px; min-width: 190px; }
+.shared-progress { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; gap: 18px; margin: 14px 0 0; padding: 15px 18px; border: 1px solid #d8deda; border-radius: 12px; background: #fff; }
+.shared-progress span { display: block; color: #74807f; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.shared-progress strong { display: block; margin-top: 3px; font-size: 14px; }
+.shared-progress > div:last-child { height: 7px; overflow: hidden; border-radius: 4px; background: #e3e9e6; }
+.shared-progress i { display: block; height: 100%; border-radius: inherit; background: #145b58; }
+.shared-timeline__rail i.is-done { background: #32a66a !important; }
+.shared-agenda article.is-done { background: #f5fbf7; }
+.shared-agenda article.is-handoff { background: #fffaf0; }
+.shared-agenda__actions { align-items: center; margin-top: 12px; }
+.shared-task-state { margin-right: auto; color: #74807f !important; font-size: 10px !important; letter-spacing: 0 !important; text-transform: none !important; }
+.shared-task-state.is-done { color: #2e7d5a !important; }
+.shared-task-state.is-handoff { color: #9b6913 !important; }
+.shared-mobile-actions { display: none; }
+.shared-handoff-backdrop { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 18px; background: rgb(13 38 36 / 52%); }
+.shared-handoff-sheet { width: min(520px, 100%); padding: 20px; border-radius: 15px; background: #fff; box-shadow: 0 24px 70px rgb(20 38 38 / 18%); }
+.shared-handoff-sheet header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.shared-handoff-sheet h2 { margin: 0 0 4px; font: 800 20px/1.2 Sora, sans-serif; }
+.shared-handoff-sheet header p { margin: 0; color: #657170; font-size: 12px; }
+.shared-handoff-sheet header button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; border-radius: 8px; background: #eef1ef; color: #142626; cursor: pointer; }
+.shared-handoff-sheet > label { display: grid; gap: 7px; margin-top: 14px; color: #52605f; font-size: 11px; font-weight: 800; }
+.shared-handoff-sheet select { min-height: 46px; padding: 0 36px 0 12px; border: 1px solid #cfd7d3; border-radius: 9px; background: #fff; color: #142626; font: inherit; }
+.shared-handoff-sheet footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #d8deda; }
 
 @media (max-width: 760px) {
   .admin-shell { width: min(100% - 28px, 680px); padding-top: 34px; }
@@ -673,4 +708,15 @@ html { scroll-behavior: smooth; }
   .shared-agenda article { grid-template-columns: 58px minmax(0, 1fr); gap: 12px; padding: 17px 14px; }
   .shared-agenda__number { display: none; }
   .shared-plan__footer { flex-direction: column; }
+  .shared-plan-page:has(.shared-mobile-actions) { padding-bottom: 92px; }
+  .shared-active-task { grid-template-columns: 1fr; padding: 16px; }
+  .shared-active-task > div:last-child { display: none; }
+  .shared-progress { grid-template-columns: 1fr; gap: 10px; }
+  .shared-handoff-request { grid-template-columns: auto minmax(0, 1fr); }
+  .shared-handoff-request > div:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+  .shared-agenda__actions { grid-column: 1 / -1; display: grid !important; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px !important; }
+  .shared-mobile-actions { position: fixed; z-index: 80; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: 1.15fr .85fr; gap: 8px; padding: 10px 12px max(10px, env(safe-area-inset-bottom)); border-top: 1px solid #d8deda; background: rgb(255 255 255 / 97%); box-shadow: 0 -8px 24px rgb(20 38 38 / 9%); }
+  .shared-mobile-actions .btn { min-height: 46px; }
+  .shared-handoff-backdrop { align-items: end; padding: 0; }
+  .shared-handoff-sheet { width: 100%; padding: 18px 14px max(14px, env(safe-area-inset-bottom)); border-radius: 16px 16px 0 0; }
 }
