@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import GoogleSignInButton from "@/components/google-sign-in-button";
+import EmailPasswordAuthForm from "@/components/email-password-auth-form";
 import { signOut } from "../actions";
 import { authConfigured, editorAccessConfigured, getAuthUser, hasEditorAccess } from "@/lib/auth";
 
@@ -25,14 +25,14 @@ export default async function SignInPage({ searchParams }: Props) {
 
         {!configured && <p className="auth-message auth-message--error" role="alert">Neon Auth mangler nødvendig konfigurasjon.</p>}
         {configured && !accessConfigured && <p className="auth-message auth-message--error" role="alert">Ingen administratorer er konfigurert ennå.</p>}
-        {error === "oauth" && <p className="auth-message auth-message--error" role="alert">Google-innloggingen ble avbrutt eller mislyktes. Prøv igjen.</p>}
+        {error === "oauth" && <p className="auth-message auth-message--error" role="alert">Google-innlogging er slått av. Bruk e-post og passord nedenfor.</p>}
 
         {user ? <div className="auth-identity">
           <strong>{user.name}</strong>
           <span>{user.email}</span>
           <p>Denne kontoen har ingen global administratorrolle. Hvis du er invitert til et event, åpner du eventlenken du har mottatt.</p>
           <form action={signOut}><button className="ui-button ui-button--outline" type="submit">Logg ut</button></form>
-        </div> : configured && accessConfigured ? <div className="auth-form"><GoogleSignInButton /></div> : null}
+        </div> : configured && accessConfigured ? <EmailPasswordAuthForm /> : null}
 
         <Link href="/events">Til eventoversikten</Link>
       </section>
