@@ -43,3 +43,28 @@ CREATE TABLE IF NOT EXISTS events (
 
 CREATE INDEX IF NOT EXISTS events_status_date_idx
   ON events (status, starts_on DESC);
+
+CREATE TABLE IF NOT EXISTS event_members (
+  event_key TEXT NOT NULL REFERENCES events(event_key) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('owner', 'editor', 'viewer')),
+  added_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  added_by TEXT NOT NULL DEFAULT 'system',
+  PRIMARY KEY (event_key, email)
+);
+
+CREATE INDEX IF NOT EXISTS event_members_email_idx ON event_members (LOWER(email));
+
+CREATE TABLE IF NOT EXISTS event_shares (
+  token TEXT PRIMARY KEY,
+  event_key TEXT NOT NULL REFERENCES events(event_key) ON DELETE CASCADE,
+  photographer_id TEXT NOT NULL,
+  photographer_name TEXT NOT NULL,
+  enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  last_viewed_revision INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_by TEXT NOT NULL DEFAULT 'editor',
+  UNIQUE (event_key, photographer_id)
+);
+
+CREATE INDEX IF NOT EXISTS event_shares_event_idx ON event_shares (event_key, enabled);

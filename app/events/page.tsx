@@ -29,7 +29,7 @@ export default async function EventsPage() {
     <main className="events-shell">
       <section className="events-masthead" aria-labelledby="events-title">
         <div><h1 id="events-title">Event Mission Control</h1><p>Planlegg fotodekning, team og kjøreplaner på tvers av alle eventproduksjonene dine.</p></div>
-        {canEdit && <button className="btn btn-primary" type="button" disabled title="Opprettelse av event kommer i neste fase"><Plus size={17} aria-hidden="true" /> Nytt event</button>}
+        {canEdit && <a className="btn btn-primary" href="/events/new"><Plus size={17} aria-hidden="true" /> Nytt event</a>}
       </section>
 
       <section className="dashboard-summary" aria-label="Samlet status">

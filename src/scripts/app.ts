@@ -75,6 +75,7 @@ let saving = false
 let dirty = false
 let localRevision = 0
 let canEdit = false
+let remoteConflict: { state: PlannerState; revision: number; updatedAt: string | null } | null = null
 
 const teamList = document.querySelector<HTMLElement>('#team-list')
 const teamEmpty = document.querySelector<HTMLElement>('#team-empty')
@@ -242,8 +243,16 @@ async function persistState() {
     const response = await fetch(STATE_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ state }),
+      body: JSON.stringify({ state, expectedRevision: lastRemoteRevision }),
     })
+    if (response.status === 409) {
+      const payload = await response.json() as { state: PlannerState; revision: number; updatedAt: string | null }
+      remoteConflict = payload
+      document.querySelector<HTMLElement>('#save-conflict')?.removeAttribute('hidden')
+      setSyncStatus('offline', 'Lagringskonflikt')
+      toast('Planen er endret et annet sted', 'Velg hvilken versjon du vil beholde før du fortsetter.', 'destructive')
+      return
+    }
     if (!response.ok) throw new Error(`State save failed: ${response.status}`)
     const payload = await response.json() as { revision: number; updatedAt: string | null }
     lastRemoteRevision = payload.revision || lastRemoteRevision
@@ -260,7 +269,7 @@ async function persistState() {
     window.setTimeout(() => { void persistState() }, 5000)
   } finally {
     saving = false
-    if (dirty) void persistState()
+    if (dirty && !remoteConflict) void persistState()
   }
 }
 
@@ -1343,6 +1352,30 @@ document.querySelector('#auto-assign')?.addEventListener('click', autoAssign)
 document.querySelector('#clear-assignments')?.addEventListener('click', clearAssignments)
 document.querySelector('#export-master-pdf')?.addEventListener('click', () => { void exportMasterPdf() })
 document.querySelector('#export-button')?.addEventListener('click', exportCsv)
+
+document.querySelector('#conflict-load-latest')?.addEventListener('click', () => {
+  if (!remoteConflict) return
+  state = remoteConflict.state
+  lastRemoteRevision = remoteConflict.revision
+  lastRemoteUpdatedAt = remoteConflict.updatedAt || lastRemoteUpdatedAt
+  remoteConflict = null
+  dirty = false
+  cacheState()
+  document.querySelector<HTMLElement>('#save-conflict')?.setAttribute('hidden', '')
+  render()
+  setSyncStatus('synced', 'Nyeste versjon')
+  toast('Nyeste plan lastet', 'Lokale, ulagrede endringer ble erstattet.', 'success')
+})
+
+document.querySelector('#conflict-keep-local')?.addEventListener('click', () => {
+  if (!remoteConflict) return
+  lastRemoteRevision = remoteConflict.revision
+  lastRemoteUpdatedAt = remoteConflict.updatedAt || lastRemoteUpdatedAt
+  remoteConflict = null
+  document.querySelector<HTMLElement>('#save-conflict')?.setAttribute('hidden', '')
+  setSyncStatus('saving', 'Lagrer…')
+  void persistState()
+})
 
 const mobileFilterButton = document.querySelector<HTMLButtonElement>('#mobile-filter-toggle')
 mobileFilterButton?.addEventListener('click', () => {
