@@ -345,6 +345,7 @@ html { scroll-behavior: smooth; }
 .active-mission { position: relative; display: grid; grid-template-columns: minmax(360px, 1.3fr) minmax(250px, .8fr) auto; align-items: center; gap: 34px; overflow: hidden; padding: 27px 30px; border-radius: 16px; background: #153f3d; color: #fff; }
 .active-mission::after { position: absolute; right: -70px; bottom: -105px; width: 270px; height: 270px; border: 1px solid rgb(255 255 255 / 9%); border-radius: 50%; content: ""; }
 .active-mission__identity { position: relative; z-index: 1; display: flex; align-items: center; gap: 20px; min-width: 0; }
+.active-mission__identity > div:last-child { min-width: 0; }
 .active-mission__logo { display: grid; flex: 0 0 112px; width: 112px; height: 82px; place-items: center; padding: 12px; border-radius: 12px; background: #fff; }
 .active-mission__logo img { width: 100%; height: 100%; object-fit: contain; }
 .active-mission .event-status { color: #b9d8d5; }
@@ -452,7 +453,9 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 1220px) {
   .mission-main { width: calc(100% - 278px); margin-left: 258px; padding-right: 20px; }
-  .active-mission { grid-template-columns: minmax(300px, 1.2fr) minmax(210px, .8fr); }
+  .active-mission { grid-template-columns: minmax(0, 1.2fr) minmax(190px, .8fr); gap: 26px; }
+  .active-mission__coverage { gap: 13px; }
+  .coverage-track--large { min-width: 0; }
   .active-mission__actions { grid-column: 1 / -1; display: flex; align-items: center; }
   .directory-row { grid-template-columns: minmax(300px, 1.2fr) minmax(170px, .7fr) auto; }
   .directory-facts { display: none; }
