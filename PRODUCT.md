@@ -30,6 +30,10 @@ EMC is used before and during conferences, summits, tradeshows, festivals, and c
 - Authenticate approved editors with Neon Auth and Google login; shared visitors remain read-only.
 - Export individual photographer plans and a master plan as PDF.
 - Keep an editor-facing change history with the ability to inspect and reverse changes.
+- Create, configure, duplicate, archive, and re-import programmes for multiple event workspaces.
+- Protect collaborative saves with revision checks and explicit conflict resolution.
+- Assign event-scoped owner, editor, and viewer access.
+- Give each photographer a private mobile schedule that highlights changes since their previous visit.
 - The daisyUI/Tailwind prototype is illustrative and must not write to Neon or replace the production interface without explicit approval.
 
 ## Brand Commitments

@@ -2,7 +2,7 @@
 import { ArrowLeft, CalendarDays, History, LayoutGrid, MapPin, Users } from "lucide-react";
 import { notFound } from "next/navigation";
 import AuthControl from "@/components/auth-control";
-import { isEditor } from "@/lib/auth";
+import { getEventAccess } from "@/lib/event-access";
 import { formatEventDate, getEventBySlug } from "@/lib/events";
 import FrameOpsBootstrap from "@/app/frameops-bootstrap";
 
@@ -10,8 +10,9 @@ export const dynamic = "force-dynamic";
 
 export default async function PhotographerPlansPage({ params }: { params: Promise<{ eventSlug: string }> }) {
   const { eventSlug } = await params;
-  const [event, canEdit] = await Promise.all([getEventBySlug(eventSlug), isEditor()]);
+  const event = await getEventBySlug(eventSlug);
   if (!event) notFound();
+  const { canEdit } = await getEventAccess(event.eventKey);
   const base = `/events/${event.slug}`;
   const eventContext = { slug: event.slug, name: event.name, venue: event.venue, dateLabel: formatEventDate(event), timezone: event.timezone, stateEndpoint: `/api/events/${event.slug}/state`, historyEndpoint: `/api/events/${event.slug}/history` };
   return <>

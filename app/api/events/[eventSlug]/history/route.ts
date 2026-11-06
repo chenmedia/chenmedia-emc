@@ -1,4 +1,5 @@
-import { editorLabel, getEditor } from "@/lib/auth";
+import { editorLabel } from "@/lib/auth";
+import { getEventEditor } from "@/lib/event-access";
 import { getEventBySlug } from "@/lib/events";
 import { getDatabase } from "@/lib/neon";
 import { ensureHistorySchema, recordHistoryVersion, type StoredPlannerState } from "@/lib/planner-history";
@@ -21,10 +22,10 @@ function json(data: unknown, status = 200) {
 }
 
 export async function GET(_request: Request, context: RouteContext) {
-  const editor = await getEditor();
-  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
   const event = await getEventBySlug((await context.params).eventSlug);
   if (!event) return json({ error: "Fant ikke eventet." }, 404);
+  const editor = await getEventEditor(event.eventKey);
+  if (!editor) return json({ error: "Du må ha redigeringstilgang til eventet." }, 401);
 
   try {
     const sql = getDatabase();
@@ -60,10 +61,10 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function POST(request: Request, context: RouteContext) {
-  const editor = await getEditor();
-  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
   const event = await getEventBySlug((await context.params).eventSlug);
   if (!event) return json({ error: "Fant ikke eventet." }, 404);
+  const editor = await getEventEditor(event.eventKey);
+  if (!editor) return json({ error: "Du må ha redigeringstilgang til eventet." }, 401);
 
   let revision = 0;
   try {

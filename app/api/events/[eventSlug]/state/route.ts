@@ -1,4 +1,5 @@
-import { editorLabel, getEditor, isEditor } from "@/lib/auth";
+import { editorLabel } from "@/lib/auth";
+import { getEventAccess, getEventEditor } from "@/lib/event-access";
 import { getEventBySlug } from "@/lib/events";
 import { getDatabase } from "@/lib/neon";
 import { describeStateChanges, ensureHistorySchema, recordHistoryVersion, type StoredPlannerState } from "@/lib/planner-history";
@@ -54,8 +55,9 @@ function cleanState(input: unknown): StoredPlannerState | null {
 export async function GET(_request: Request, context: RouteContext) {
   try {
     const { eventSlug } = await context.params;
-    const [event, canEdit] = await Promise.all([getEventBySlug(eventSlug), isEditor()]);
+    const event = await getEventBySlug(eventSlug);
     if (!event) return json({ error: "Fant ikke eventet." }, 404);
+    const { canEdit } = await getEventAccess(event.eventKey);
     const sql = getDatabase();
     const [row] = await sql`
       SELECT state, revision, updated_at, updated_by FROM event_states WHERE event_key = ${event.eventKey}
@@ -74,16 +76,20 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function POST(request: Request, context: RouteContext) {
-  const editor = await getEditor();
-  if (!editor) return json({ error: "Du må være logget inn som redaktør." }, 401);
   const { eventSlug } = await context.params;
   const event = await getEventBySlug(eventSlug);
   if (!event) return json({ error: "Fant ikke eventet." }, 404);
+  const editor = await getEventEditor(event.eventKey);
+  if (!editor) return json({ error: "Du må ha redigeringstilgang til eventet." }, 401);
 
   let body: unknown;
   try { body = await request.json(); } catch { return json({ error: "Ugyldig forespørsel." }, 400); }
-  const state = cleanState((body as { state?: unknown })?.state);
+  const requestBody = body as { state?: unknown; expectedRevision?: unknown };
+  const state = cleanState(requestBody.state);
   if (!state) return json({ error: "Planen inneholder ugyldige data." }, 400);
+  const expectedRevision = typeof requestBody.expectedRevision === "number" && Number.isInteger(requestBody.expectedRevision)
+    ? requestBody.expectedRevision
+    : -1;
 
   try {
     const sql = getDatabase();
@@ -92,20 +98,32 @@ export async function POST(request: Request, context: RouteContext) {
       SELECT state, revision, updated_at, updated_by FROM event_states WHERE event_key = ${event.eventKey}
     ` as EventStateRow[];
     const changedBy = editorLabel(editor);
+    const serialized = JSON.stringify(state);
+    if (previous && expectedRevision !== previous.revision) {
+      return json({ error: "Planen ble endret på en annen enhet.", conflict: true, state: previous.state, revision: previous.revision, updatedAt: previous.updated_at }, 409);
+    }
+    if (!previous && expectedRevision !== 0) {
+      return json({ error: "Planen har en nyere versjon.", conflict: true, state: EMPTY_STATE, revision: 0, updatedAt: null }, 409);
+    }
+    const [saved] = previous
+      ? await sql`
+          UPDATE event_states SET state = ${serialized}::jsonb, revision = revision + 1, updated_at = NOW(), updated_by = ${changedBy}
+          WHERE event_key = ${event.eventKey} AND revision = ${expectedRevision}
+          RETURNING revision, updated_at
+        ` as Array<{ revision: number; updated_at: string }>
+      : await sql`
+          INSERT INTO event_states (event_key, state, revision, updated_at, updated_by)
+          VALUES (${event.eventKey}, ${serialized}::jsonb, 1, NOW(), ${changedBy})
+          ON CONFLICT (event_key) DO NOTHING
+          RETURNING revision, updated_at
+        ` as Array<{ revision: number; updated_at: string }>;
+    if (!saved) {
+      const [current] = await sql`SELECT state, revision, updated_at, updated_by FROM event_states WHERE event_key = ${event.eventKey}` as EventStateRow[];
+      return json({ error: "Planen ble endret på en annen enhet.", conflict: true, state: current?.state ?? EMPTY_STATE, revision: current?.revision ?? 0, updatedAt: current?.updated_at ?? null }, 409);
+    }
     if (previous) {
       await recordHistoryVersion(sql, event.eventKey, previous.state, previous.revision, "baseline", ["Tidligere versjon før endringen."], previous.updated_by || "Redaktør");
     }
-    const serialized = JSON.stringify(state);
-    const [saved] = await sql`
-      INSERT INTO event_states (event_key, state, revision, updated_at, updated_by)
-      VALUES (${event.eventKey}, ${serialized}::jsonb, 1, NOW(), ${changedBy})
-      ON CONFLICT (event_key) DO UPDATE SET
-        state = EXCLUDED.state,
-        revision = event_states.revision + 1,
-        updated_at = NOW(),
-        updated_by = EXCLUDED.updated_by
-      RETURNING revision, updated_at
-    ` as Array<{ revision: number; updated_at: string }>;
     const sessionNames = new Map(event.program.map((session) => [session.id, session.title]));
     await recordHistoryVersion(sql, event.eventKey, state, saved.revision, "save", describeStateChanges(previous?.state ?? null, state, sessionNames), changedBy);
     return json({ ok: true, revision: saved.revision, updatedAt: saved.updated_at });

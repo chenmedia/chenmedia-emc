@@ -126,6 +126,13 @@ export async function listEvents() {
   return rows.map(mapEvent);
 }
 
+export async function getEventByKey(eventKey: string) {
+  await ensureEventsSchema();
+  const sql = getDatabase();
+  const rows = await sql.query(`${eventSelect} WHERE e.event_key = $1 LIMIT 1`, [eventKey]) as EventRow[];
+  return rows[0] ? mapEvent(rows[0]) : null;
+}
+
 export async function getEventBySlug(slug: string) {
   await ensureEventsSchema();
   const sql = getDatabase();
